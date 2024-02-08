@@ -35,6 +35,21 @@ exports.tlAdd = async (req,res,next) =>{
             msg = "Tên phải nhập ít nhất 1 kí tự ";
             return  res.render('sanpham/addloai',{msg:msg});
         }
+
+        
+        try {
+            fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
+    
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+                }
+    
+            })
+          } catch (error) {
+            
+          }
         // làm tương tự với các validate khác 
 
         // dưới này ghi csdl 
@@ -42,6 +57,7 @@ exports.tlAdd = async (req,res,next) =>{
             // tạo đối tượng ghi vào csdl
             let objtl = new md1.tlModal();
             objtl.name = req.body.name;
+            objtl.image = "http://localhost:3000/uploads/" + req.file.originalname;
            
             await objtl.save();
             msg = " Thêm Thể Loại  thành CÔng";

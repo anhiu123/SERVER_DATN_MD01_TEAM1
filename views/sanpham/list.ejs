@@ -6,6 +6,14 @@
     <title>Home</title>
     <link rel="stylesheet" href="/bootstrap-5.3.0-dist/css/bootstrap.min.css">     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+      .color-box {
+        display: inline-block; /* Hiển thị các div theo chiều ngang */
+        width: 50px;
+        height: 50px;
+        margin-left: 10px; /* Khoảng cách giữa các div */
+    }
+    </style>
 </head>
 <body>
     
@@ -69,7 +77,7 @@
                                       <li><a class="dropdown-item" href="#">Tag</a></li>
                                     </ul>
                                   </li>
-                                
+                                  <% if (objU.role==='Admin'){ %>
                                   <li class="nav-item dropdown">
                                     <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                       Thống Kê   
@@ -81,7 +89,12 @@
                                       <li><a class="dropdown-item" href="#">Đơn Hàng</a></li>
                                     </ul>
                                   </li>
-
+                                  <% } %>
+                                  <li class="nav-item dropdown">
+                                    <a class="navbar-brand " href="/chat">
+                                     Chat (<span class="text-danger" id="messageCount">0</span>)   
+                                    </a>
+                                  </li>
                                   <% if (objU.role==='Admin'){ %>
                                     <li class="nav-item dropdown">
                                       <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -93,19 +106,7 @@
                                       </ul>
                                     </li>
                                     <% } %>
-                              <!-- <% if (role === 'Admin') { %> -->
-                               
-                              <!-- <% } %> -->
-                              <!-- <li class="nav-item">
-                                <a class="nav-link disabled">Disabled</a>
-                              </li>
-                            </ul>
-                            <form class="d-flex" role="search">
-                              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                              <button class="btn btn-outline-success" type="submit">Search</button>
-                            </form>
-                          </div>
-                        </div> -->
+                             
                       </nav>
                 </div>
             </div>
@@ -132,7 +133,12 @@
                           <th>Mô Tả</th>
                           <th>Giá</th>
                           <th>Loại </th>
-                          <th>Trang Thái </th>
+                          <th>Màu Sắc </th>
+                          <th>Thêm Màu   </th>
+                          <th>Thêm Size   </th>
+                          <th>Số Lượng Bán    </th>
+                          <th>  Thời Gian Tạo    </th>
+                          <th>Sửa </th>
                   </tr>
 
                   <h2>Tổng Số Sản Phẩm : <%= sl %> </h2>
@@ -158,7 +164,27 @@
                               <td class="text-center"><%= item.mota %></td>
                               <td class="text-center"><%= item.price %></td>
                               <td class="text-center"><%= item.loai %></td>
-                              <td class="text-center"><a href="/sanpham/delete/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
+                              <td class="text-center">
+                                <% listmauSP.forEach((mau) => { %>
+                                  <% if (mau.productId.toString() === item._id.toString()) { %>
+                                      <% mauList.forEach((mauInfo) => { %>
+                                          <% if (mauInfo._id.toString() === mau.colorId.toString()) { %>
+                                              
+                                              <div class="color-box" class="text-center" style="background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></div>
+                                          <% } %>
+                                      <% }); %>                               
+                                  <% } %>
+                              <% }); %>
+                            </td>
+                              <td class="text-center"><a href="/sanpham/addmau/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
+                              </td>
+                               
+                                  <td class="text-center"><a href="#"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
+                            
+
+                                    <td><%= item.quantitySold %></td>
+                                    <td><%= item.timeCreate %></td>
+                              <td>
                                 <a href="/sanpham/update/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.FnU8so-q6D6zY926B2SpWgAAAA&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
                               </td>
                               
@@ -167,6 +193,8 @@
       
                   <% }) %>
               </table>
+
+
             </div></div>
            
             <div class=" col-12           col-md-2 d-none d-md-block"></div>

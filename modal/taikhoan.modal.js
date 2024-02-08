@@ -6,10 +6,11 @@ var tkSchema = new db.mongoose.Schema(
         username : {type : String ,require:true},
         passwd  : {type : String,require:true},
         email :{ type :String, require:true},
-        role : { type : String ,require:true}
+        image : { type : String,require:true},
+        address : { type : String ,require:true}
     },
     {
-        collection :'user'
+        collection :'NguoiDung'
     }
 );
 

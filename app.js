@@ -14,11 +14,15 @@ var theloaiRouter = require('./routes/theloai');
 var sizeRouter = require('./routes/size');
 var mauRouter = require('./routes/mau');
 var thongkeRouter = require('./routes/thongke');
+var chatRouter = require('./routes/chat');
 // var loginRouter = require('./routes/login');
 
 var apiSP = require('./routes/API/api.sanpham');
 var apiTK = require('./routes/API/api.taikhoan');
 var apiTL = require('./routes/API/api.theloai');
+var apiM = require('./routes/API/api.mau');
+var apiMSP = require('./routes/API/api.mausanpham');
+var apiDH = require('./routes/API/api.donhang');
 
 var app = express();
 
@@ -50,11 +54,15 @@ app.use('/theloai', theloaiRouter);
 app.use('/size', sizeRouter);
 app.use('/mau', mauRouter);
 app.use('/thongke', thongkeRouter);
+app.use('/chat', chatRouter);
 // app.use('/login', loginRouter);
 
 app.use('/api-sanpham', apiSP);
 app.use('/api-taikhoan', apiTK);
 app.use('/api-theloai', apiTL);
+app.use('/api-mau', apiM);
+app.use('/api-mausanpham', apiMSP);
+app.use('/api-donhang', apiDH);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

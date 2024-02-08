@@ -116,25 +116,7 @@
                           <% }); %>
                         </select>    
                        <br>               
-                       
-                       <label for="exampleInputPassword1" class="form-label">Size :</label>
-                       <!-- <input type="text" class="form-control , mb-3"  name="loai">    -->
-                       <select id="item" name="loai">
-                         <% list.forEach((item) => { %>
-                           <option value="<%= item.name %>"><%= item.name %></option>
-                         <% }); %>
-                       </select>    
-                      <br>  
-
-                      <label for="exampleInputPassword1" class="form-label">Màu :</label>
-                      <!-- <input type="text" class="form-control , mb-3"  name="loai">    -->
-                      <select id="item" name="loai">
-                        <% list.forEach((item) => { %>
-                          <option value="<%= item.name %>"><%= item.name %></option>
-                        <% }); %>
-                      </select>    
-                     <br>  
-                   
+                         
                         <label for="exampleInputPassword1" class="form-label">Mô Tả</label>
                         <input type="text" class="form-control , mb-3" name="mota" >
                       
@@ -142,21 +124,7 @@
                         <label for="exampleInputPassword1" class="form-label">Giá Tiền</label>
                         <input type="number" class="form-control , mb-3"  name="price">
 
-                        <label  for="exampleInputPassword1" class="form-label">Số Lượng</label>
-                        <input type="text" class="form-control , mb-3" name="soluong">
-
-                        <div class=" mb-3 form-check">
-                          <input class="form-check-input" type="radio" name="status" id="option1" value="true">
-                          <label class="form-check-label" for="option1">
-                            Còn Hàng
-                          </label>
-                        </div>
-                        <div class=" mb-3 form-check">
-                          <input class="form-check-input" type="radio" name="status" id="option2" value="false">
-                          <label class="form-check-label" for="option2">
-                           Hết Hàng
-                          </label>
-                        </div>
+                    
                     
   
                     <button type="submit" class="btn btn-primary">Submit</button>

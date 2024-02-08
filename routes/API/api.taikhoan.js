@@ -8,7 +8,7 @@ router.get('/', apiTK.getUsers);
 
 router.post('/', apiTK.addUs);
 
-router.delete('/:id', apiTK.dltUS);
+// router.delete('/:id', apiTK.dltUS);
 
 router.put('/:id', apiTK.putUS);
 

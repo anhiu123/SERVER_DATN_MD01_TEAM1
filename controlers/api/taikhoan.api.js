@@ -51,25 +51,25 @@ exports.addUs = async(req,res,next)=>{
         }
         return res.json(objRes);
 }
-exports.dltUS = async(req,res,next)=>{
+// exports.dltUS = async(req,res,next)=>{
 
-    let objRes = {
-        msg: '',
-        status: 0,
-        data: {}
-        };  
-    let id_tk = req.params.id;
+//     let objRes = {
+//         msg: '',
+//         status: 0,
+//         data: {}
+//         };  
+//     let id_tk = req.params.id;
 
-    try {
+//     try {
 
-     await md.tkModal.findByIdAndDelete(id_tk);
-     objRes.msg = "Đã xóa thành công";
-        objRes.status = 1;  
-    } catch (error) {
-        objRes.msg = error.message;
-    }
-    res.json (objRes);  
-}
+//      await md.tkModal.findByIdAndDelete(id_tk);
+//      objRes.msg = "Đã xóa thành công";
+//         objRes.status = 1;  
+//     } catch (error) {
+//         objRes.msg = error.message;
+//     }
+//     res.json (objRes);  
+// }
 
 exports.putUS = async(req,res,next)=>{
 

@@ -32,7 +32,6 @@
              
             </div>
             <hr>
-
             <!-- Khối 2 -->
             <div class=" col-12">
                 <div class="align-items-center bg-white">
@@ -48,13 +47,9 @@
                                     <a class="navbar-brand dropdown-toggle" href="add" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Màu 
                                     </a>
-                                    <ul class="dropdown-menu">
-                                  
-                                    
+                                    <ul class="dropdown-menu">                                                                    
                                       <li><a class="dropdown-item" href="/mau"> Màu  </a></li>
                                       <li><a class="dropdown-item" href="/mau/addmau"> Thêm Màu  </a></li>
-                        
-                  
                                     </ul>
                                   </li>
                             
@@ -64,8 +59,7 @@
             
             <div class="ms-4 ms-4"><h1> Màu  </h1>
               <a href="/sanpham">Sản Phẩm/</a>
-            
-            
+
             </div>
             <!-- khối 3 -->
             <div class=" col-12 col-sm-3 col-md-2"></div>
@@ -77,28 +71,26 @@
 
                   <tr>
                       <th>ID</th>  
-                       <th>Tên Thể Loại Phẩm</th> 
-                       <th>Trạng Thái</th> 
-                         
+                      <th>Tên </th> 
+                       <th>Mã Mầu</th> 
+                       <th>Mầu</th> 
+                       <th>Trạng Thái</th>                      
                   </tr>
-
-                  <h2>Tổng Số Thể Loại : <%= sl %> </h2>
+                  <h2>Tổng Số Mầu  : <%= sl %> </h2>
 
                   <% listtl.forEach((item)=>{ %>
       
                     <tr>
                         <td><%= item._id %></td> 
                           <td><%= item.name %></td>  
-                            <td><a href="/sanpham/deletel/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
-                              <a href="/sanpham/updatel/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.FnU8so-q6D6zY926B2SpWgAAAA&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
-                            </td>
-                            
+              
+                          <td><%= item.colorcode %></td>  
+                          <td><div style="background-color: <%= '#' + item.colorcode %>; width: 50px; height: 50px;"></div></td>                                                         
+                            <td>    <a href="/mau/update/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.FnU8so-q6D6zY926B2SpWgAAAA&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a></td>
                           
                     </tr>
     
-                <% }) %>
-      
-                
+                <% }) %>                  
               </table>
             </div></div>
            
@@ -108,11 +100,6 @@
             </div>
         </div>
 </div> 
-
-
-
-
-    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script> 
     <script src="/bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
 </body>

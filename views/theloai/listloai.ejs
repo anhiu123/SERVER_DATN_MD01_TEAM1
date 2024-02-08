@@ -99,6 +99,7 @@
 
                   <tr>
                       <th>ID</th>  
+                      <th>Ảnh</th>
                        <th>Tên Thể Loại Phẩm</th> 
                        <th>Trạng Thái</th> 
                          
@@ -110,6 +111,7 @@
       
                     <tr>
                         <td><%= item._id %></td> 
+                        <td class="text-center"><img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""></td>
                           <td><%= item.name %></td>  
                             <td><a href="/sanpham/deletel/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
                               <a href="/sanpham/updatel/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.FnU8so-q6D6zY926B2SpWgAAAA&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>

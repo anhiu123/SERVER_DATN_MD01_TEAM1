@@ -1,5 +1,6 @@
 
 var md = require('../modal/taikhoan.modal');
+var md1 = require('../modal/admin.modal');
 
 exports.tkList = async(req,res,next) =>{
     // render ra view 
@@ -45,13 +46,13 @@ exports.tkAdd = async(req,res,next) =>{
                 objtk.username = req.body.username;
                 objtk.email = req.body.email;
                 objtk.passwd = req.body.pass;
-                if(req.body.admin === 'true'){
-                        objtk.role ='Admin'
-                }else if(req.body.user === 'false'){
-                    objtk.role ='User'
-                }else{
-                    msg = "Bạn Chưa Chọn Vai Trò !";
-                    return  res.render('taikhoan/add',{msg:msg});
+                if (req.body.admin === 'true') {
+                    objtk.role = 'Admin';
+                } else if (req.body.admin === 'false') {
+                    objtk.role = 'User';
+                } else {
+                    msg = "Bạn chưa chọn vai trò!";
+                    return res.render('taikhoan/add', { msg: msg });
                 }
 
                 await objtk.save();
@@ -151,8 +152,8 @@ exports.Login = async(req,res,next)=>{
     let msg = '';
     if(req.method == 'POST'){
         try {
-            let objU = await md.tkModal.findOne({username: req.body.username});
-            console.log(objU);
+            let objU = await md1.adminModal.findOne({username: req.body.username});
+         //   console.log(objU);
             if(objU != null ){
                 // tồn tại username ==> kiểm tra passwd
                 if(objU.passwd == req.body.passwd){

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/bootstrap-5.3.0-dist/css/bootstrap.min.css">     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <style>  .no-underline, .no-underline:hover, .no-underline:focus, .no-underline:active {
+        text-decoration: none !important;
+      }
+      .message.other .media .media-body {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .message.other .media .media-body .d-flex {
+        justify-content: flex-start;
+    }
+    
+    .message.other .media .media-body img {
+        order: -1; /* Di chuyển ảnh lên trên cùng */
+    }
+    
+      .chat-container {
+        max-width: 600px;
+        margin: 50px auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .chat-messages {
+        padding: 15px;
+        overflow-y: scroll;
+        height: 300px;
+    }
+    .message {
+        margin-bottom: 15px;
+    }
+    .message p {
+        padding: 10px 15px;
+        border-radius: 20px;
+        max-width: 70%;
+    }
+    .message.me p {
+        background-color: #007bff;
+        color: #fff;
+        float: right;
+    }
+    .message.other p {
+        background-color: #f0f0f0;
+        color: #333;
+        float: left;
+    }
+    .message-time {
+        font-size: 12px;
+        color: #888;
+        margin-top: 5px;
+    }
+    
+
+        .color-box {
+          display: inline-block; /* Hiển thị các div theo chiều ngang */
+          width: 50px;
+          height: 50px;
+          margin-left: 10px; /* Khoảng cách giữa các div */
+      }
+    
+    </style>
+</head>
+<body>
+    
+ <!-- khối 1  -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 d-flex align-items-center" style="height: 100px;">
+                <div style="font-size: 24px;">
+                    <i class="fas fa-phone" style="font-size: 34px;"></i>
+                    +84 0967977673
+                </div>
+                <div style="font-size: 24px;" class="ms-5">
+                    <i class="far fa-envelope"  style="font-size: 34px;"></i>
+                    <%= objU.email %>
+                </div>
+                <div style="font-size: 24px; margin-left:730px ;">
+                    <i class="fas fa-bell"  style="font-size: 34px;"></i>
+                    Thông Báo
+                </div>
+                <div style="font-size: 24px; margin-left:130px ;">
+                    <i class="fas fa-user"  style="font-size: 34px;"></i>
+                    <%= objU.role %>
+                </div>
+             
+            </div>
+            <hr>
+
+            <!-- Khối 2 -->
+            <div class=" col-12">
+                <div class="align-items-center bg-white">
+                    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                        <div class="container-fluid">
+                          <a class="navbar-brand" href="/sanpham/home">Home </a>
+                          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                          </button>
+                          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    
+                        
+                            
+                      </nav>
+                </div>
+            </div>
+            
+            <div class="ms-4 ms-4"><h1> Chi Tiết Đơn Hàng  </h1>
+              <a href="/sanpham/home"> Home</a>
+            
+            
+            </div>
+            <!-- khối 3 -->
+            <div class=" col-12 col-sm-3 col-md-2"></div>
+            <!-- khối 4 -->
+          
+       
+         
+            <div class=" col-12 col-sm-9 col-md-8">
+              <div class="mt-5">
+                <table class="table table-bordered mx-auto" border="1">
+                    <form action="" method="post" >
+                    <% listDH.forEach((item) => { %>
+                        <select class="form-control" name="status">
+                        <option value="<%= item.status %>"><%= item.status %></option>
+                        <option value="Chờ xác nhận">Chờ Xác Nhận</option>
+                        <option value="Đã xác nhận">Đã Xác Nhận </option>
+                        <option value="Đang giao">Đang Giao</option>
+                        <option value="Đã giao">Đã Giao</option>
+                        <option value="Hủy">Hủy</option>
+                      </select>
+                      <% }); %>
+                      <br>
+                      <button>Xác Nhận</button>
+                    </form>
+                      <br>
+                      <br>
+                    <tr>
+                        <th>ID</th>  
+                        <th>Tên Sản Phẩm</th> 
+                        <th>Ảnh</th>
+                        <th>Mô Tả</th>
+                        <th>Giá</th>
+                        <th>Loại</th>
+                        <th>Màu Sắc</th>
+                    </tr>
+                   <% let totalAmount = 0; %>
+                    <% listspd.forEach((spdItem) => { %>
+                        <% let product = listsp.find(productItem => productItem._id.toString() === spdItem.SanPhamId.toString()) %>
+                        <% if (product) { %>
+                           <% totalAmount += product.price; %>
+                            <tr>
+                                <td><%= product._id %></td>
+                                <td><%= product.name %></td>
+                                <td><img src="<%= product.image %>" style="width: 130px; height: 70px;" alt=""></td>
+                                <td><%= product.mota %></td>
+                                <td><%= product.price %></td>
+                                <td><%= product.loai %></td>
+                                <td>
+                                    <% listmauSP.forEach((mau) => { %>
+                                        <% if (mau.productId.toString() === product._id.toString()) { %>
+                                            <% mauList.forEach((mauInfo) => { %>
+                                                <% if (mauInfo._id.toString() === mau.colorId.toString()) { %>
+                                                    <div class="color-box text-center" style="background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></div>
+                                                <% } %>
+                                            <% }); %>
+                                        <% } %>
+                                    <% }); %>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% }); %>
+                </table>
+                <h1>Tổng tiền: <%= totalAmount %> đ</h1>
+
+
+            </div></div>
+           
+            <div class=" col-12           col-md-2 d-none d-md-block"></div>
+            <div class=" col-12 ">
+              <img style="margin-left: 800px;margin-top: 50;" src="https://tse3.mm.bing.net/th?id=OIP.vR3c8gJDtTZuFFJLa3nHcwAAAA&pid=Api&P=0&h=180" alt="Mô tả ảnh" width="200" height="150">
+            </div>
+        </div>
+</div> 
+
+
+
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script> 
+    <script src="/bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

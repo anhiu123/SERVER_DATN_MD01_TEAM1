@@ -2,12 +2,12 @@ var db = require('./db');
 // định nghĩa khuôn mẫu 
 var tlSchema = new db.mongoose.Schema(
 
-        {
+        {  image : { type : String,require:true},
             name : { type:String, require:true },
          
         },
         {
-            collection: 'theloai'
+            collection: 'TheLoai'
         }      
 );
 

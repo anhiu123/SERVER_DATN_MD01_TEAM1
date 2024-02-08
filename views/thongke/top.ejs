@@ -75,26 +75,21 @@
         
               <h1 class="">Top Sản Phẩm </h1>
               <table class="table table-bordered w-75 mx-auto" border="1" >
-
                 <tr>
                   
                      <th>Tên Sản Phẩm</th> 
+                     <th>  Ảnh Sản Phẩm   </th>
                         <th>Số Lượng Bán Được  </th>
                 </tr>
  
-              
-    
                 <% listsp.forEach((item)=>{ %>
     
                     <tr>
                       
-                          <td><%= item.name %></td>  
-                         
-                            <td><%= item.mota %></td>
-                       
-                     
-                            
-                          
+                          <td class="text-center"><%= item.name %></td>  
+                          <td class="text-center"><img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""></td>
+                            <td class="text-center"><%= item.quantitySold %></td>
+                               
                     </tr>
     
                 <% }) %>
