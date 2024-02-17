@@ -51,7 +51,7 @@
                 <% if(msg.length>0) {%>
                     <h3> <%= msg %></h3>
                     <% } %>
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                   
                         <label  for="exampleInputPassword1" class="form-label">Tên Màu</label>
                         <select id="item" name="mau">
@@ -60,6 +60,8 @@
                             <% }); %>
                           </select>    
                           <br>
+                          <label for="exampleInputPassword1" class="form-label">Ảnh Đại Diện</label>
+                          <input type="file" class="form-control , mb-3" name="anh">
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </form>
            </div>

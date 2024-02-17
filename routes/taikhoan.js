@@ -9,6 +9,8 @@ var checkLG = require('../middleware/check-Login');
 router.get('/',checkLG.yeu_cau_login, tk.tkList);
 router.post('/',checkLG.yeu_cau_login, tk.tkList);
 
+router.get('/admin',checkLG.yeu_cau_login, tk.tkListAdmin);
+
 router.get('/add',checkLG.yeu_cau_login, tk.tkAdd);
 router.post('/add',checkLG.yeu_cau_login, tk.tkAdd);
 

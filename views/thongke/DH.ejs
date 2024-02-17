@@ -43,62 +43,7 @@
                             <span class="navbar-toggler-icon"></span>
                           </button>
                           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item dropdown">
-                                    <a class="navbar-brand dropdown-toggle" href="add" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                       Sản Phẩm
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="/sanpham"> Sản Phẩm</a></li>
-                                      <li><a class="dropdown-item" href="/sanpham/add">Thêm  Sản Phẩm</a></li>
-                                      <li><a class="dropdown-item" href="/theloai"> Thể Loại </a></li>
-                                      <li><a class="dropdown-item" href="/size"> Size   </a></li>
-                                      <li><a class="dropdown-item" href="/mau"> Màu   </a></li>
-                                    
-                  
-                                    </ul>
-                                  </li>
-                                  <li class="nav-item dropdown">
-                                    <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Tìm Kiếm Sản Phẩm 
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="/sanpham/search">Tìm Kiếm</a></li>
-                                      <!-- <li><a class="dropdown-item" href="#">Category</a></li>
-                                      <li><hr class="dropdown-divider"></li>
-                                      <li><a class="dropdown-item" href="#">Tag</a></li> -->
-                                    </ul>
-                                  </li>
-                                  <% if (objU.role==='Admin'){ %>
-                                  <li class="nav-item dropdown">
-                                    <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                      Thống Kê   
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                      <li><a class="dropdown-item" href="/thongke">Doanh Thu</a></li>
-                                      <li><a class="dropdown-item" href="/thongke/top">Top Sản Phẩm</a></li>
-                                      <li><hr class="dropdown-divider"></li>
-                                      <li><a class="dropdown-item" href="/thongke/DH">Đơn Hàng</a></li>
-                                    </ul>
-                                  </li>
-                                  <% } %>
-                                  <li class="nav-item dropdown">
-                                    <a class="navbar-brand " href="/chat">
-                                     Chat (<span class="text-danger" id="messageCount">0</span>)   
-                                    </a>
-                                  </li>
-                                  <% if (objU.role==='Admin'){ %>
-                                    <li class="nav-item dropdown">
-                                      <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Tài Khoản 
-                                      </a>
-                                      <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="/taikhoan">Tài Khoản Người Dùng </a></li>
-                                        <li><a class="dropdown-item" href="/taikhoan/admin">Tài Khoản Admin  </a></li>
-                                        <li><a class="dropdown-item" href="/taikhoan/add">Thêm Admin</a></li>
-                                      </ul>
-                                    </li>
-                                    <% } %>
+                          
                       </nav>
                 </div>
             </div>
@@ -110,7 +55,8 @@
                   <tr>
                     <th>ID Đơn Hàng</th>
                     <th>Tên Người Dùng</th>
-                    <th>Ngày Đặt</th>
+                    
+                    <th>Ngày Đặt </th>
                     <th>Trạng Thái</th>
                     <th>Chi Tiết Đơn Hàng</th>
               
@@ -130,17 +76,16 @@
                                 <% } %>
                           <% }); %>
                           </td>  
+
                           <td><%= item.date %></td>
-                          
                         <td >   <select class="form-control">
                           <option value="<%= item.status %>"><%= item.status %></option>
                          
                         </select>
                         
-                      
                         </td> 
 
-                        <td><a href="/sanpham/dhdetail/<%= item._id %>">Chi Tiết</a></td>
+                        <td><a href="/thongke/dhdone/<%= item._id %>">Chi Tiết</a></td>
 
                        
                           

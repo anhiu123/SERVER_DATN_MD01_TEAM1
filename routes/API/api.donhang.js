@@ -7,4 +7,6 @@ router.get('/', apiDH.getDH);
 
 router.get('/SPD', apiDH.getSPDH);
 
+router.get('/add', apiDH.addDH);
+
 module.exports = router;

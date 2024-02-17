@@ -21,6 +21,30 @@ exports.getDH = async (req,res,next)=>{
         
 }
 
+exports.addDH = async (req,res,next)=>{
+
+    let objRes = {
+                msg: '',
+                status: 0,
+                data: {}
+                };
+              
+                try {
+                    
+                    let objDH = new  md.DonHangModal();
+                    objDH.UserId = req.body.name;
+                    objDH.status = req.body.image;
+                    objDH.date = req.body.mota;
+            
+                    objRes.data = await objDH.save();
+                    objRes.msg = "Thêm thành công";
+                    objRes.status = 1;
+                } catch (error) {
+                    objRes.msg = error.message;
+                }
+                return res.json(objRes);
+}
+
 exports.getSPDH = async (req,res,next)=>{
 
     let objRes = {

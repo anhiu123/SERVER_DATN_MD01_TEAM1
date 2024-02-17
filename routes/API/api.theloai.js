@@ -7,10 +7,10 @@ var apiTL = require('../../controlers/api/theloai.api');
 
 router.get('/', apiTL.getTL);
 
-router.post('/', apiTL.addTL);
+// router.post('/', apiTL.addTL);
 
-router.delete('/:id', apiTL.dltTL);
+// router.delete('/:id', apiTL.dltTL);
 
-router.put('/:id', apiTL.putTL);
+// router.put('/:id', apiTL.putTL);
 
 module.exports = router;

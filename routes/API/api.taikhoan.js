@@ -12,4 +12,7 @@ router.post('/', apiTK.addUs);
 
 router.put('/:id', apiTK.putUS);
 
+
+router.put('/mk/:id', apiTK.putMK);
+
 module.exports = router;

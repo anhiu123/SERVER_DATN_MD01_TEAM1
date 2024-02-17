@@ -75,7 +75,7 @@
         
               <h1>Doanh Thu</h1>
 
-              <form>
+              <form method="post">
                 <div class="form-group">
                   <label for="start_date">Từ ngày:</label>
                   <input type="date" class="form-control" id="start_date" name="start_date">
@@ -87,6 +87,52 @@
                 <br>
                 <button type="submit" class="btn btn-primary">Thống kê</button>
               </form>
+              <h1>Tổng Tiền : <%= typeof tongTien !== 'undefined' ? tongTien : 0 %></h1>
+
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>ID Đơn Hàng</th>
+                    <th>Tên Người Dùng</th>
+                    <th>Ngày Đặt </th>
+                    <th>Trạng Thái</th>
+                    <th>Chi Tiết Đơn Hàng</th>
+              
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dữ liệu đơn hàng -->
+              
+                  <% listDH.forEach((item)=>{ %>
+      
+                    <tr>
+                        <td ><%= item._id %></td> 
+                          <td >
+                            <% listTK.forEach((tk) => { %>
+                              <% if (tk._id.toString() === item.UserId.toString()) { %>
+                                <%= tk.username %>
+                                <% } %>
+                          <% }); %>
+                          </td>  
+
+                          <td><%= item.date %></td>
+                        <td >   <select class="form-control">
+                          <option value="<%= item.status %>"><%= item.status %></option>
+                         
+                        </select>
+                        
+                        </td> 
+
+                        <td><a href="/thongke/dhdone/<%= item._id %>">Chi Tiết</a></td>
+
+                       
+                          
+                          </tr>
+                <% }) %>
+                  <!-- Kết thúc dữ liệu đơn hàng -->
+                </tbody>
+              </table>
+            
             </div></div>
            
             <div class=" col-12           col-md-2 d-none d-md-block"></div>

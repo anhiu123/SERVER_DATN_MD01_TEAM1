@@ -13,6 +13,7 @@ var mauSPSchema = new db.mongoose.Schema(
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'MauSac',
               },
+              image : { type : String,require:true},
         },
         {
             collection: 'MauSanPham'

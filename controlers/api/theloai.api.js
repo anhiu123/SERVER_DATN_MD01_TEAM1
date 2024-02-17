@@ -19,89 +19,89 @@ exports.getTL = async (req,res,next)=>{
 
 }
 
-exports.addTL = async(req,res,next)=>{
+// exports.addTL = async(req,res,next)=>{
     
-    let objRes = {
-        msg: '',
-        status: 0,
-        data: {}
-        };
+//     let objRes = {
+//         msg: '',
+//         status: 0,
+//         data: {}
+//         };
 
-        if(req.body.name.length<1){
-            objRes.msg = "Name phải nhập ít nhất 1 ký tự";
-        return res.json(objRes); // thoát khỏi hàm
-        }
+//         if(req.body.name.length<1){
+//             objRes.msg = "Name phải nhập ít nhất 1 ký tự";
+//         return res.json(objRes); // thoát khỏi hàm
+//         }
 
-        try {
+//         try {
             
-            let objTL = new  md.tlModal();
-            objTL.name = req.body.name;
+//             let objTL = new  md.tlModal();
+//             objTL.name = req.body.name;
                
-            objRes.data = await objTL.save();
+//             objRes.data = await objTL.save();
 
-            objRes.msg = "Thêm thành công";
-            objRes.status = 1;
+//             objRes.msg = "Thêm thành công";
+//             objRes.status = 1;
 
-        } catch (error) {
-            objRes.msg = error.message;
-        }
+//         } catch (error) {
+//             objRes.msg = error.message;
+//         }
 
-        return res.json(objRes);
-}
+//         return res.json(objRes);
+// }
 
-exports.dltTL = async(req,res,next)=>{  
-    let objRes = {
-        msg: '',
-        status: 0,
-        data: {}
-        };
+// exports.dltTL = async(req,res,next)=>{  
+//     let objRes = {
+//         msg: '',
+//         status: 0,
+//         data: {}
+//         };
         
-    let id_tl = req.params.id;
+//     let id_tl = req.params.id;
 
-    try {
+//     try {
 
-     await md.tlModal.findByIdAndDelete(id_tl);
-     objRes.msg = "Đã xóa thành công";
-        objRes.status = 1;
+//      await md.tlModal.findByIdAndDelete(id_tl);
+//      objRes.msg = "Đã xóa thành công";
+//         objRes.status = 1;
   
-    } catch (error) {
-        objRes.msg = error.message;
-    }
-    res.json (objRes);
-}
+//     } catch (error) {
+//         objRes.msg = error.message;
+//     }
+//     res.json (objRes);
+// }
 
-exports.putTL = async(req,res,next)=>{
+// exports.putTL = async(req,res,next)=>{
 
-    let objRes = {
-        msg: '',
-        status: 0,
-        data: {}
-        };
+//     let objRes = {
+//         msg: '',
+//         status: 0,
+//         data: {}
+//         };
 
-        try {
-            let id_tl = req.params.id;
-            let dieuKien = {_id:id_tl};
-            let validate = true;
+//         try {
+//             let id_tl = req.params.id;
+//             let dieuKien = {_id:id_tl};
+//             let validate = true;
 
-            if(req.body.name.length<1){
-                objRes.msg = "Name phải nhập ít nhất 1 ký tự";
-                validate = false
-            }
-            if(validate){
-                let objTL = {};
-                objTL.name = req.body.name;       
+//             if(req.body.name.length<1){
+//                 objRes.msg = "Name phải nhập ít nhất 1 ký tự";
+//                 validate = false
+//             }
+//             if(validate){
+//                 let objTL = {};
+//                 objTL.name = req.body.name;       
                
-                await md.tlModal.findByIdAndUpdate(id_tl,objTL);
-                objRes.msg = "Cập nhật thành công";
-                objRes.status = 1;
+//                 await md.tlModal.findByIdAndUpdate(id_tl,objTL);
+//                 objRes.msg = "Cập nhật thành công";
+//                 objRes.status = 1;
 
-            }
-            objRes.data = await md.tlModal.findById(dieuKien);
+//             }
+//             objRes.data = await md.tlModal.findById(dieuKien);
 
-        } catch (error) {
-            objRes.msg = error.message;
-        }
+//         } catch (error) {
+//             objRes.msg = error.message;
+//         }
     
-        return res.json(objRes);
+//         return res.json(objRes);
   
-}
+// }

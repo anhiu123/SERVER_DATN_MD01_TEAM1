@@ -1,7 +1,7 @@
-var md = require('../../modal/sanphamingio.modal');
+var md = require('../../modal/sanphamlove');
 const { param } = require('../../routes');
 
-exports.getSPG = async (req,res,next)=>{
+exports.getSPL = async (req,res,next)=>{
 
     let objRes = {
         msg: '',
@@ -9,7 +9,7 @@ exports.getSPG = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.SPGModal.find();
+        objRes.data = await md.SploveModal.find();
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
@@ -19,7 +19,7 @@ exports.getSPG = async (req,res,next)=>{
         
 }
 
-exports.addSPG = async (req,res,next)=>{
+exports.addSPL = async (req,res,next)=>{
 
     let objRes = {
         msg: '',
@@ -29,8 +29,8 @@ exports.addSPG = async (req,res,next)=>{
       
         try {
             
-            let objDH = new  md.SPGModal();
-            objDH.CartId = req.body.CartId;
+            let objDH = new  md.SploveModal();
+            objDH.UserId = req.body.UserId;
             objDH.SanPhamId = req.body.SanPhamId;
     
             objRes.data = await objDH.save();

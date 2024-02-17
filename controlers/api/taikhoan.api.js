@@ -15,7 +15,7 @@ exports.getUsers = async (req,res,next)=>{
         console.log(err);
         objRes.msg = err.message;
         }
-        res.json(objRes);
+        res.json(objRes.data);
 }
 
 exports.addUs = async(req,res,next)=>{
@@ -40,7 +40,8 @@ exports.addUs = async(req,res,next)=>{
             objTK.username = req.body.username;
             objTK.passwd = req.body.passwd;
             objTK.email = req.body.email; 
-            objTK.role = req.body.role;
+            objTK.address = req.body.address;
+            objTK.image = req.body.image;
            
             objRes.data = await objTK.save();
 
@@ -85,21 +86,54 @@ exports.putUS = async(req,res,next)=>{
             let dieuKien = {_id:id_tk};
             let validate = true;
 
-            if(req.body.username.length<5){
-                objRes.msg = "Username phải nhập ít nhất 5 ký tự";
-                validate = false;
-            }
-            if(req.body.passwd.length ==0 || req.body.email.length ==0 || req.body.role.length ==0){
-                objRes.msg = "Không ĐƯợc Để Trống";
-                validate = false;
-            }   
+            // if(req.body.username.length<5){
+            //     objRes.msg = "Username phải nhập ít nhất 5 ký tự";
+            //     validate = false;
+            // }
+            // if(req.body.passwd.length ==0 || req.body.email.length ==0 || req.body.role.length ==0){
+            //     objRes.msg = "Không ĐƯợc Để Trống";
+            //     validate = false;
+            // }   
 
             if(validate){
                 let objTK = {};
                 objTK.username = req.body.username;
                 objTK.email = req.body.email;
+                objTK.image = req.body.image;
+                objTK.address = req.body.address;
+               
+                await md.tkModal.findByIdAndUpdate(id_tk,objTK);
+                objRes.msg = "Cập nhật thành công";
+                objRes.status = 1;
+
+            }
+            objRes.data = await md.tkModal.findById(dieuKien);
+        } catch (error) {
+            objRes.msg = error.message;
+        }
+        return res.json(objRes);
+}
+
+exports.putMK = async(req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: {}
+        };
+
+        try {
+
+            let id_tk = req.params.id;
+            let dieuKien = {_id:id_tk};
+            let validate = true;
+
+
+
+            if(validate){
+                let objTK = {};
                 objTK.passwd = req.body.passwd;
-                objTK.role = req.body.role;
+             
                
                 await md.tkModal.findByIdAndUpdate(id_tk,objTK);
                 objRes.msg = "Cập nhật thành công";

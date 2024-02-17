@@ -1,7 +1,7 @@
-var md = require('../../modal/sanphamingio.modal');
+var md = require('../../modal/danhgia.modal');
 const { param } = require('../../routes');
 
-exports.getSPG = async (req,res,next)=>{
+exports.getDG = async (req,res,next)=>{
 
     let objRes = {
         msg: '',
@@ -9,7 +9,7 @@ exports.getSPG = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.SPGModal.find();
+        objRes.data = await md.DGModal.find();
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
@@ -19,7 +19,7 @@ exports.getSPG = async (req,res,next)=>{
         
 }
 
-exports.addSPG = async (req,res,next)=>{
+exports.addDG = async (req,res,next)=>{
 
     let objRes = {
         msg: '',
@@ -29,9 +29,12 @@ exports.addSPG = async (req,res,next)=>{
       
         try {
             
-            let objDH = new  md.SPGModal();
-            objDH.CartId = req.body.CartId;
+            let objDH = new  md.DGModal();
+            objDH.UserId = req.body.UserId;
             objDH.SanPhamId = req.body.SanPhamId;
+            objDH.date = req.body.date;
+            objDH.noidung = req.body.noidung;
+            objDH.sao = req.body.sao;
     
             objRes.data = await objDH.save();
             objRes.msg = "Thêm thành công";

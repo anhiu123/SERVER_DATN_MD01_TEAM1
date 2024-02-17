@@ -21,6 +21,25 @@ exports.tkList = async(req,res,next) =>{
 
 }
 
+exports.tkListAdmin = async(req,res,next) =>{
+    // render ra view 
+
+
+    let list = null;
+    let sl = await md1.adminModal.find().count();
+
+    try {
+        
+        list = await md1.adminModal.find();
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    res.render('taikhoan/listadmin',{listtk:list,sl:sl});
+
+}
+
 exports.tkAdd = async(req,res,next) =>{
     // render ra view 
 

@@ -72,9 +72,9 @@
                                     </a>
                                     <ul class="dropdown-menu">
                                       <li><a class="dropdown-item" href="/sanpham/search">Tìm Kiếm</a></li>
-                                      <li><a class="dropdown-item" href="#">Category</a></li>
+                                      <!-- <li><a class="dropdown-item" href="#">Category</a></li>
                                       <li><hr class="dropdown-divider"></li>
-                                      <li><a class="dropdown-item" href="#">Tag</a></li>
+                                      <li><a class="dropdown-item" href="#">Tag</a></li> -->
                                     </ul>
                                   </li>
                                   <% if (objU.role==='Admin'){ %>
@@ -101,8 +101,9 @@
                                         Tài Khoản 
                                       </a>
                                       <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="taikhoan">Danh Sách</a></li>
-                                        <li><a class="dropdown-item" href="taikhoan/add">Thêm</a></li>
+                                        <li><a class="dropdown-item" href="/taikhoan">Tài Khoản Người Dùng </a></li>
+                                        <li><a class="dropdown-item" href="/taikhoan/admin">Tài Khoản Admin  </a></li>
+                                        <li><a class="dropdown-item" href="/taikhoan/add">Thêm Admin</a></li>
                                       </ul>
                                     </li>
                                     <% } %>
@@ -160,7 +161,14 @@
                       <tr>
                           <td class="text-center"><%= item._id %></td> 
                             <td class="text-center"><%= item.name %></td>  
-                              <td class="text-center"><img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""></td>
+                              <td class="text-center">
+                                <!-- <img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""> -->
+                                <% listmauSP.forEach((mau) => { %>
+                                  <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
+                                    <img src="<%= mau.image %>" style="width: 130px;height: 70px;" alt="">                                                                                                           
+                                  <% } %>
+                              <% }); %>
+                              </td>
                               <td class="text-center"><%= item.mota %></td>
                               <td class="text-center"><%= item.price %></td>
                               <td class="text-center"><%= item.loai %></td>

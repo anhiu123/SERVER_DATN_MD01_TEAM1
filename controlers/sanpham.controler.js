@@ -32,6 +32,8 @@ exports.spList = async (req, res, next) => {
             mauList = await Mau.mauModal.find();
             list = await md.spModal.find();
         } else {
+            listmauSP = await mdMauSanPham.mauSPModal.find();
+            mauList = await Mau.mauModal.find();
             // Nếu có loaiChon, lọc danh sách sản phẩm theo loại chọn
             list = await md.spModal.find({ loai: loaiChon })
         }
@@ -51,9 +53,10 @@ exports.Home = async (req,res,next) =>{
     let listTK = null;
 
     try {
-        listDH = await mdDH.DonHangModal.find();
+        listDH = await mdDH.DonHangModal.find({ status: { $ne: "Đã giao" } });
+
         listTK = await mdTK.tkModal.find();
-        console.log(listDH);
+      //  console.log(listDH);
     } catch (error) {
         
     }
@@ -73,12 +76,14 @@ exports.DHDetail = async (req,res,next) =>{
     let listDH = null;
     let listTK = null;
     let objDH_2  = null;
+    let listDH1= null;
 
     try {
             listspd = await mdSPD.SPHModal.find({DonHangId : id_dh});
             listmauSP = await mdMauSanPham.mauSPModal.find();
             listDH = await mdDH.DonHangModal.find({_id  : id_dh });
             listsp = await md.spModal.find();
+            listDH1 = await mdDH.DonHangModal.find({ status: { $ne: "Đã giao" } });
             listTK = await mdTK.tkModal.find();
             mauList = await Mau.mauModal.find();
         
@@ -93,8 +98,8 @@ exports.DHDetail = async (req,res,next) =>{
             let objDH_2  = {};
             objDH_2.status = req.body.status;
             await mdDH.DonHangModal.findByIdAndUpdate(id_dh,objDH_2);
-
-            res.render('sanpham/donhangdetail',{objU:objU ,listspd:listspd,listsp:listsp,listmauSP:listmauSP ,mauList:mauList,listDH:listDH , objDH_2:objDH_2});
+            res.render('sanpham/home',{objU:objU,listDH:listDH1,listTK:listTK});
+           // res.render('sanpham/donhangdetail',{objU:objU ,listspd:listspd,listsp:listsp,listmauSP:listmauSP ,mauList:mauList,listDH:listDH , objDH_2:objDH_2});
 
         } catch (error) {
             
@@ -135,18 +140,18 @@ exports.DHDetail = async (req,res,next) =>{
         // làm tương tự với các validate khác 
 
 
-      try {
-        fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
+    //   try {
+    //     fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
 
-            if(err){
-                console.log(err);
-            }else{
-                console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
-            }
+    //         if(err){
+    //             console.log(err);
+    //         }else{
+    //             console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+    //         }
 
-        })
-      } catch (error) {   
-      }
+    //     })
+    //   } catch (error) {   
+    //   }
 
         // dưới này ghi csdl 
         try{
@@ -154,7 +159,7 @@ exports.DHDetail = async (req,res,next) =>{
             const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
             let objsp = new md.spModal();
             objsp.name = req.body.name;
-            objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
+            // objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
             objsp.mota = req.body.mota;
             objsp.price = req.body.price;
             objsp.loai = req.body.loai;
@@ -184,6 +189,22 @@ exports.spAddMau = async(req,res,next) =>{
     let msg = "";
 
     if(req.method == 'POST'){
+
+
+        try {
+            fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
+    
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+                }
+    
+            })
+          } catch (error) {   
+          }
+
+
         // dưới này ghi csdl 
         try{
             // tạo đối tượng ghi vào csdl
@@ -191,6 +212,7 @@ exports.spAddMau = async(req,res,next) =>{
          
             objmsp.productId = id_sp;
             objmsp.colorId = req.body.mau;
+            objmsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
             await objmsp.save();
             msg = " Thêm Màu Sản Phẩm  thành CÔng";
         }catch(err){

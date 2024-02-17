@@ -23,6 +23,8 @@ var apiTL = require('./routes/API/api.theloai');
 var apiM = require('./routes/API/api.mau');
 var apiMSP = require('./routes/API/api.mausanpham');
 var apiDH = require('./routes/API/api.donhang');
+var apiDG = require('./routes/API/api.danhgia');
+var apiTB = require('./routes/API/api.thongbao');
 
 var app = express();
 
@@ -63,6 +65,8 @@ app.use('/api-theloai', apiTL);
 app.use('/api-mau', apiM);
 app.use('/api-mausanpham', apiMSP);
 app.use('/api-donhang', apiDH);
+app.use('/api-danhgia', apiDG);
+app.use('/api-thongbao', apiTB);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
