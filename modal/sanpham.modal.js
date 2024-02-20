@@ -6,7 +6,7 @@ var spSchema = new db.mongoose.Schema(
         {
          
             name : { type:String, require:true },
-            // image : { type : String,require:true},
+             image : { type : String,require:true},
             mota : {type : String,require:true},
             price : {type : Number,require:true},
             loai : {type : String,require:true},

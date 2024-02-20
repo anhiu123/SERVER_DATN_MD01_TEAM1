@@ -25,6 +25,7 @@ var apiMSP = require('./routes/API/api.mausanpham');
 var apiDH = require('./routes/API/api.donhang');
 var apiDG = require('./routes/API/api.danhgia');
 var apiTB = require('./routes/API/api.thongbao');
+var apiTN = require('./routes/API/api.tinnhan');
 
 var app = express();
 
@@ -67,6 +68,7 @@ app.use('/api-mausanpham', apiMSP);
 app.use('/api-donhang', apiDH);
 app.use('/api-danhgia', apiDG);
 app.use('/api-thongbao', apiTB);
+app.use('/api-tinnhan', apiTN);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

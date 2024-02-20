@@ -33,7 +33,7 @@ exports.tlAdd = async (req,res,next) =>{
         // validate đơn giản : 
         if(req.body.name.length<1){
             msg = "Tên phải nhập ít nhất 1 kí tự ";
-            return  res.render('sanpham/addloai',{msg:msg});
+            return  res.render('theloai/addloai',{msg:msg , objU:objU});
         }
 
         

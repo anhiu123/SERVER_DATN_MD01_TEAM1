@@ -95,10 +95,29 @@ exports.DHDetail = async (req,res,next) =>{
     if (req.method == "POST") {
 
         try {
+            const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
             let objDH_2  = {};
             objDH_2.status = req.body.status;
             await mdDH.DonHangModal.findByIdAndUpdate(id_dh,objDH_2);
-            res.render('sanpham/home',{objU:objU,listDH:listDH1,listTK:listTK});
+            let objtb = new mdTB.ThongBaoModal();
+            listTK.forEach((tk) => {
+                // Thực hiện các hành động với mỗi phần tử trong mảng
+                listDH.forEach((dh) => {
+                    // Thực hiện các hành động với mỗi phần tử trong mảng
+                    if (tk._id.toString() === dh.UserId.toString()) {
+                        objtb.UserId =  tk._id;
+                        objtb.status =  "Đơn Hàng "  + dh._id + " Của Bạn Đã Được : " + req.body.status;
+                    } else {
+                        // Thực hiện hành động khi không có điều kiện nào được thỏa mãn
+                    }
+                });
+            });
+            
+           
+            objtb.date = fullDateTimeString;
+            await objtb.save();
+
+            res.redirect(req.originalUrl);
            // res.render('sanpham/donhangdetail',{objU:objU ,listspd:listspd,listsp:listsp,listmauSP:listmauSP ,mauList:mauList,listDH:listDH , objDH_2:objDH_2});
 
         } catch (error) {
@@ -140,18 +159,18 @@ exports.DHDetail = async (req,res,next) =>{
         // làm tương tự với các validate khác 
 
 
-    //   try {
-    //     fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
+      try {
+        fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
 
-    //         if(err){
-    //             console.log(err);
-    //         }else{
-    //             console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
-    //         }
+            if(err){
+                console.log(err);
+            }else{
+                console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+            }
 
-    //     })
-    //   } catch (error) {   
-    //   }
+        })
+      } catch (error) {   
+      }
 
         // dưới này ghi csdl 
         try{
@@ -159,7 +178,7 @@ exports.DHDetail = async (req,res,next) =>{
             const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
             let objsp = new md.spModal();
             objsp.name = req.body.name;
-            // objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
+             objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
             objsp.mota = req.body.mota;
             objsp.price = req.body.price;
             objsp.loai = req.body.loai;
@@ -188,6 +207,13 @@ exports.spAddMau = async(req,res,next) =>{
     listmau = await Mau.mauModal.find();
     let msg = "";
 
+    const sizes = [
+        { size: "S", quantity: req.body.sizeS },
+        { size: "M", quantity: req.body.sizeM },
+        { size: "L", quantity: req.body.sizeL },
+        { size: "XL", quantity: req.body.sizeXL }
+      ];
+
     if(req.method == 'POST'){
 
 
@@ -202,6 +228,7 @@ exports.spAddMau = async(req,res,next) =>{
     
             })
           } catch (error) {   
+            msg = "Chưa Thêm Ảnh ";
           }
 
 
@@ -213,6 +240,7 @@ exports.spAddMau = async(req,res,next) =>{
             objmsp.productId = id_sp;
             objmsp.colorId = req.body.mau;
             objmsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
+            objmsp.sizes = sizes;
             await objmsp.save();
             msg = " Thêm Màu Sản Phẩm  thành CÔng";
         }catch(err){

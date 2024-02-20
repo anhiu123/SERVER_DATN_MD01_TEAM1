@@ -14,6 +14,12 @@ var mauSPSchema = new db.mongoose.Schema(
                 ref: 'MauSac',
               },
               image : { type : String,require:true},
+              sizes: [
+                {
+                    size: { type: String, required: true },
+                    quantity: { type: Number, default: 0 }
+                }
+            ]
         },
         {
             collection: 'MauSanPham'

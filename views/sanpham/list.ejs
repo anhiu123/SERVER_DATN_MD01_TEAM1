@@ -13,6 +13,24 @@
         height: 50px;
         margin-left: 10px; /* Khoảng cách giữa các div */
     }
+    .dropdown-menu {
+      max-height: 200px; /* Đặt chiều cao tối đa của dropdown menu */
+      overflow-y: auto; /* Cho phép cuộn khi nội dung vượt quá chiều cao tối đa */
+  }
+ 
+.size-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.size-item {
+  margin-right: 10px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+
+  
     </style>
 </head>
 <body>
@@ -60,7 +78,7 @@
                                       <li><a class="dropdown-item" href="sanpham"> Sản Phẩm</a></li>
                                       <li><a class="dropdown-item" href="sanpham/add">Thêm  Sản Phẩm</a></li>
                                       <li><a class="dropdown-item" href="/theloai"> Thể Loại </a></li>
-                                      <li><a class="dropdown-item" href="size/"> Size   </a></li>
+                                      <!-- <li><a class="dropdown-item" href="size/"> Size   </a></li> -->
                                       <li><a class="dropdown-item" href="mau/"> Màu   </a></li>
                                     
                   
@@ -135,8 +153,9 @@
                           <th>Giá</th>
                           <th>Loại </th>
                           <th>Màu Sắc </th>
+                          <th>Size Sản Phẩm  aaaaaaaaaaaaaaaaaaaaâaaaaa</th>
                           <th>Thêm Màu   </th>
-                          <th>Thêm Size   </th>
+                          <!-- <th>Thêm Size   </th> -->
                           <th>Số Lượng Bán    </th>
                           <th>  Thời Gian Tạo    </th>
                           <th>Sửa </th>
@@ -165,7 +184,7 @@
                                 <!-- <img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""> -->
                                 <% listmauSP.forEach((mau) => { %>
                                   <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
-                                    <img src="<%= mau.image %>" style="width: 130px;height: 70px;" alt="">                                                                                                           
+                                    <img src="<%= mau.image %>" style="width: 130px;height: 70px; margin-top: 20px;" alt="">                                                                                                           
                                   <% } %>
                               <% }); %>
                               </td>
@@ -178,22 +197,37 @@
                                       <% mauList.forEach((mauInfo) => { %>
                                           <% if (mauInfo._id.toString() === mau.colorId.toString()) { %>
                                               
-                                              <div class="color-box" class="text-center" style="background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></div>
+                                              <div class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></div>
                                           <% } %>
                                       <% }); %>                               
                                   <% } %>
                               <% }); %>
                             </td>
-                              <td class="text-center"><a href="/sanpham/addmau/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
+                            <td class="text-center">
+                              <div class="size-container">
+                                  <% listmauSP.forEach((mau) => { %>
+                                      <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
+                                          <% mau.sizes.forEach(size => { %>
+                                              <div class="size-item"><%= size.size %> - <%= size.quantity %></div>
+                                          <% }) %>                                                                                               
+                                      <% } %>
+                                  <% }); %>
+                              </div>
+                          </td>
+                          
+                          
+                          
+                          
+                              <td class="text-center"><a href="/sanpham/addmau/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToj0igxTpTwdlpv19tJIK9o1HDY9G-M0SLSg&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
                               </td>
                                
-                                  <td class="text-center"><a href="#"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
+                                 
                             
 
                                     <td><%= item.quantitySold %></td>
                                     <td><%= item.timeCreate %></td>
                               <td>
-                                <a href="/sanpham/update/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.FnU8so-q6D6zY926B2SpWgAAAA&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
+                                <a href="/sanpham/update/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfBR4wCLos45ns7dyxbE0m2-T6RfhzuHt5Ew&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
                               </td>
                               
                             

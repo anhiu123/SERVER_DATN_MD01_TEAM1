@@ -21,7 +21,7 @@ router.post('/dhdetail/:id_dh',checkLG.yeu_cau_login, sp.DHDetail);
 // router.post('/', sp.spList);
 
 router.get('/add',checkLG.yeu_cau_login, sp.spAdd);
-router.post('/add', checkSP.addSP,checkLG.yeu_cau_login, sp.spAdd)
+router.post('/add', objUpload.single('anh'), checkSP.addSP,checkLG.yeu_cau_login, sp.spAdd)
 
 router.get('/search',checkLG.yeu_cau_login, sp.spSearch);
 

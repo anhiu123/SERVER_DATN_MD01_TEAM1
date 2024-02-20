@@ -34,7 +34,7 @@ exports.mAdd = async (req,res,next) =>{
         // validate đơn giản : 
         if(req.body.name.length<1 || req.body.colorcode.length<1){
             msg = "Không Được Để Trống";
-            return  res.render('mau/add',{msg:msg});
+            return  res.render('mau/add',{msg:msg  ,objU:objU });
         }
         // làm tương tự với các validate khác 
 

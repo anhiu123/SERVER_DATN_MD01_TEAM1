@@ -15,6 +15,9 @@ router.get('/SPG', apiSPG.getSPG);
 router.post('/SPG', apiSPG.addSPG);
 
 
+router.delete('/:id', apiSPG.dltSPG);
+
+
 router.get('/SPL', apiSPL.getSPL);
 
 router.post('/SPL', apiSPL.addSPL);
