@@ -48,20 +48,37 @@ exports.tkAdd = async(req,res,next) =>{
     if(req.method == 'POST'){
 
         if(req.body.username.length <4){
-            msg = "Tên Sản Phẩm phải nhập ít nhất 5 kí tự ";
+            msg = "Tên Đăng Nhập   nhập ít nhất 5 kí tự ";
             return  res.render('taikhoan/add',{msg:msg});
         }
         if(req.body.email.length ==0){
             msg = "Không Được Để Trống email";
             return  res.render('taikhoan/add',{msg:msg});
+        }else {
+            // Kiểm tra định dạng email bằng biểu thức chính quy (regular expression)
+            const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!req.body.email.match(emailFormat)) {
+                msg = "Định dạng email không hợp lệ";
+                return res.render('taikhoan/add', { msg: msg });
+            }
         }
         if(req.body.pass.length ==0){
             msg = "Không Được Để Trống PassWord";
             return  res.render('taikhoan/add',{msg:msg});
         }
+
+
         try {
-            
-                let objtk = new md.tkModal();
+            // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+            const existingCate = await md1.adminModal.findOne({ username: req.body.username });
+            const existingCate1 = await md1.adminModal.findOne({email : req.body.email });
+        
+            if (existingCate || existingCate1) {
+                // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                msg = "Đã Tồn Tại Tài Khoản Này";
+            } else {
+                // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                let objtk = new md1.adminModal();
                 objtk.username = req.body.username;
                 objtk.email = req.body.email;
                 objtk.passwd = req.body.pass;
@@ -77,27 +94,20 @@ exports.tkAdd = async(req,res,next) =>{
                 await objtk.save();
                 msg = "Đăng Kí Thành Công ! ";
                 console.log(objtk);
-        } catch (error) {
-            msg = error.message;
+            }
+        } catch (err) {
+            msg = "Lỗi : " + err.message;
         }
-
     }
-
-
     res.render('taikhoan/add',{msg:msg});
-
 }
 
-
 exports.tkDel = async(req,res,next) =>{
-
-
     let id_u = req.params.id_u;
     let obju =  {_id:'',name:''};
     let dieukien = {_id:id_u};
 
     obju = await md.tkModal.findById(dieukien);
-    
 
     if(req.method=='POST'){
         // Xóa 

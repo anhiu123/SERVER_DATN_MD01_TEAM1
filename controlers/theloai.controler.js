@@ -28,6 +28,7 @@ exports.tlAdd = async (req,res,next) =>{
     console.log(req.body);
     let msg = ''; 
     let objU = req.session.userLogin;
+    let listtl = null;
 
     if(req.method == 'POST'){
         // validate đơn giản : 
@@ -51,19 +52,26 @@ exports.tlAdd = async (req,res,next) =>{
             
           }
         // làm tương tự với các validate khác 
-
-        // dưới này ghi csdl 
-        try{
-            // tạo đối tượng ghi vào csdl
-            let objtl = new md1.tlModal();
-            objtl.name = req.body.name;
-            objtl.image = "http://localhost:3000/uploads/" + req.file.originalname;
-           
-            await objtl.save();
-            msg = " Thêm Thể Loại  thành CÔng";
-        }catch(err){
-            msg = " Lỗi : " +err.message;
+        try {
+            // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+            const existingCate = await md1.tlModal.findOne({ name: req.body.name, image:"http://localhost:3000/uploads/" + req.file.originalname });
+        
+            if (existingCate) {
+                // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                msg = "Đã Có Thể Loại Này";
+            } else {
+                // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                let objtl = new md1.tlModal();
+                objtl.name = req.body.name;
+                objtl.image = "http://localhost:3000/uploads/" + req.file.originalname;
+               
+                await objtl.save();
+                msg = " Thêm Thể Loại  thành CÔng";
+            }
+        } catch (err) {
+            msg = "Lỗi : " + err.message;
         }
+        // dưới này ghi csdl 
     }
     res.render('theloai/addloai',{msg:msg,objU:objU});
 }

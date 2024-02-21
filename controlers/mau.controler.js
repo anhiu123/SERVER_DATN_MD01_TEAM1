@@ -38,17 +38,24 @@ exports.mAdd = async (req,res,next) =>{
         }
         // làm tương tự với các validate khác 
 
-        // dưới này ghi csdl 
-        try{
-            // tạo đối tượng ghi vào csdl
-            let objtl = new md1.mauModal();
-            objtl.name = req.body.name;
-            objtl.colorcode = req.body.colorcode;
-           
-            await objtl.save();
-            msg = " Thêm Mầu  thành CÔng";
-        }catch(err){
-            msg = " Lỗi : " +err.message;
+        try {
+            // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+            const existingCate = await md1.mauModal.findOne({ name: req.body.name});
+            const existingCate1 = await md1.mauModal.findOne({ colorcode: req.body.colorcode});
+            if (existingCate || existingCate1) {
+                // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                msg = "Đã Có Màu Này";
+            } else {
+                // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                let objtl = new md1.mauModal();
+                objtl.name = req.body.name;
+                objtl.colorcode = req.body.colorcode;
+               
+                await objtl.save();
+                msg = " Thêm Mầu  thành CÔng";
+            }
+        } catch (err) {
+            msg = "Lỗi : " + err.message;
         }
     }
     res.render('mau/add',{msg:msg,objU:objU});

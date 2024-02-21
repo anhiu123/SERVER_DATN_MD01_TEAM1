@@ -206,6 +206,7 @@ exports.spAddMau = async(req,res,next) =>{
     let id_sp = req.params.id_sp;
     listmau = await Mau.mauModal.find();
     let msg = "";
+    let listmsp = null;
 
     const sizes = [
         { size: "S", quantity: req.body.sizeS },
@@ -215,13 +216,14 @@ exports.spAddMau = async(req,res,next) =>{
       ];
 
     if(req.method == 'POST'){
-
+        listmsp = mdMauSanPham.mauSPModal.find();
 
         try {
             fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
     
                 if(err){
                     console.log(err);
+                    msg = " Chưa Chọn Ảnh"
                 }else{
                     console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
                 }
@@ -231,20 +233,25 @@ exports.spAddMau = async(req,res,next) =>{
             msg = "Chưa Thêm Ảnh ";
           }
 
-
-        // dưới này ghi csdl 
-        try{
-            // tạo đối tượng ghi vào csdl
-            let objmsp = new mdMauSanPham.mauSPModal();
-         
-            objmsp.productId = id_sp;
-            objmsp.colorId = req.body.mau;
-            objmsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
-            objmsp.sizes = sizes;
-            await objmsp.save();
-            msg = " Thêm Màu Sản Phẩm  thành CÔng";
-        }catch(err){
-            msg = " Lỗi : " +err.message;
+          try {
+            // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+            const existingColor = await mdMauSanPham.mauSPModal.findOne({ productId: id_sp, colorId: req.body.mau });
+        
+            if (existingColor) {
+                // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                msg = "Đã Có Màu Này Trong Sản Phẩm";
+            } else {
+                // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                let objmsp = new mdMauSanPham.mauSPModal();
+                objmsp.productId = id_sp;
+                objmsp.colorId = req.body.mau;
+                objmsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
+                objmsp.sizes = sizes;
+                await objmsp.save();
+                msg = "Thêm Màu Sản Phẩm thành CÔng";
+            }
+        } catch (err) {
+            msg = "Lỗi : " + err.message;
         }
     }
     res.render('sanpham/addmau',{listmau:listmau,objU:objU,msg:msg});
