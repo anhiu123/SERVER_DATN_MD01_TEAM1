@@ -32,6 +32,9 @@ exports.addSPH = async (req,res,next)=>{
             let objDH = new  md.SPHModal();
             objDH.DonHangId = req.body.DonHangId;
             objDH.SanPhamId = req.body.SanPhamId;
+            objDH.ColorCode = req.body.ColorCode;
+            objDH.Size = req.body.Size;
+            objDH.SoLuong = req.body.SoLuong;
     
             objRes.data = await objDH.save();
             objRes.msg = "Thêm thành công";

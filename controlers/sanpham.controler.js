@@ -77,6 +77,8 @@ exports.DHDetail = async (req,res,next) =>{
     let listTK = null;
     let objDH_2  = null;
     let listDH1= null;
+    let listsize = null;
+    let listm = null;
 
     try {
             listspd = await mdSPD.SPHModal.find({DonHangId : id_dh});
@@ -93,6 +95,49 @@ exports.DHDetail = async (req,res,next) =>{
     }
 
     if (req.method == "POST") {
+      //  console.log(listmauSP + " thuộc tính sp  ");
+        if (req.body.status == "Đã giao") {
+            let listspg = [];
+           
+            try {
+                // Lặp qua mỗi phần tử trong listspd
+                listspd.forEach(spd => {
+                    // Kiểm tra xem SanPhamId có tồn tại trong listsp hay không
+                    let foundProduct = listsp.find(sp => sp._id.toString() === spd.SanPhamId.toString());
+                    if (foundProduct) {
+                        listspg.push(foundProduct);
+                    }
+                    listspg.forEach(spg => {
+                            if(spd.SanPhamId.toString() == spg._id.toString()){
+
+                          
+                        (async () => {
+                            spg.quantitySold = spg.quantitySold + spd.SoLuong;
+                            await md.spModal.findByIdAndUpdate(spg._id, spg);
+                        })();
+                    }
+
+                    });
+                    listmauSP.forEach(msp => {
+                                msp.sizes.forEach(sz => {
+                                    if(sz._id.toString() == spd.IdThuocTinh.toString()){
+                                        (async () => {
+                                        sz.quantity  =   sz.quantity  - spd.SoLuong;   
+                                        await mdMauSanPham.mauSPModal.findByIdAndUpdate(msp._id, msp);
+                                    })();
+                            }
+
+                    });
+                    
+                });
+                });
+             
+            } catch (error) {
+                
+            }
+        } else {
+            
+        }
 
         try {
             const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -111,29 +156,23 @@ exports.DHDetail = async (req,res,next) =>{
                         // Thực hiện hành động khi không có điều kiện nào được thỏa mãn
                     }
                 });
-            });
-            
-           
+            });   
             objtb.date = fullDateTimeString;
             await objtb.save();
+
+
 
             res.redirect(req.originalUrl);
            // res.render('sanpham/donhangdetail',{objU:objU ,listspd:listspd,listsp:listsp,listmauSP:listmauSP ,mauList:mauList,listDH:listDH , objDH_2:objDH_2});
 
-        } catch (error) {
-            
-        }
-        
+        } catch (error) {          
+        }      
     } else {
         
     }
-
-   
     res.render('sanpham/donhangdetail',{objU:objU ,listspd:listspd,listsp:listsp,listmauSP:listmauSP ,mauList:mauList,listDH:listDH , objDH_2:objDH_2});
 
 }
-
-  
     exports.spAdd = async(req,res,next) =>{
     // render ra view 
 
@@ -198,7 +237,6 @@ exports.DHDetail = async (req,res,next) =>{
     res.render('sanpham/add',{msg:msg,list:listloai,objU:objU});
 
 }
-
 exports.spAddMau = async(req,res,next) =>{
     // render ra view 
     let listmau = null;
@@ -256,8 +294,6 @@ exports.spAddMau = async(req,res,next) =>{
     }
     res.render('sanpham/addmau',{listmau:listmau,objU:objU,msg:msg});
 }
-
-
 exports.spSearch = async (req,res,next) =>{
     // render ra view 
 
@@ -290,7 +326,6 @@ exports.spSearch = async (req,res,next) =>{
     res.render('sanpham/search',{msg:msg,list:list,objU:objU});
 
 }
-
 exports.spDel = async (req,res,next) =>{
 
     let id_sp = req.params.id_sp;
@@ -315,8 +350,6 @@ exports.spDel = async (req,res,next) =>{
     res.render('sanpham/delete',{obj:objSp});
 
 }
-
-
 exports.spUpdate = async (req,res,next) =>{
 
     let id_sp = req.params.id_sp;

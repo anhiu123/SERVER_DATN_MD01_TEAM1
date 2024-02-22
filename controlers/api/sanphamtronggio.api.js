@@ -32,6 +32,9 @@ exports.addSPG = async (req,res,next)=>{
             let objDH = new  md.SPGModal();
             objDH.CartId = req.body.CartId;
             objDH.SanPhamId = req.body.SanPhamId;
+            objDH.ColorCode = req.body.ColorCode;
+            objDH.Size = req.body.Size;
+            objDH.SoLuong = req.body.SoLuong;
     
             objRes.data = await objDH.save();
             objRes.msg = "Thêm thành công";

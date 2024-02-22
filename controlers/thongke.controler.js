@@ -44,9 +44,10 @@ exports.tkDoanhThu = async(req, res, next) => {
                 try {
                     const listSPD = await mdSPD.SPHModal.find({ DonHangId: donHang._id });
                     for (const spd of listSPD) {
+                       
                         const sanPham = await md.spModal.findById(spd.SanPhamId);
-                      //  console.log(sanPham); // Kiểm tra sản phẩm đã lấy được
-                        tongTien += sanPham.price || 0; // Giả sử có trường tổng tiền trong hóa đơn
+                        console.log(sanPham); // Kiểm tra sản phẩm đã lấy được
+                        tongTien += sanPham.price * spd.SoLuong || 0; // Giả sử có trường tổng tiền trong hóa đơn
                     }
                 } catch (error) {
                     console.error('Lỗi khi truy vấn sản phẩm trong đơn hàng:', error);

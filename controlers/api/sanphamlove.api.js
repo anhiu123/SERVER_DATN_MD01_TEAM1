@@ -32,7 +32,7 @@ exports.addSPL = async (req,res,next)=>{
             let objDH = new  md.SploveModal();
             objDH.UserId = req.body.UserId;
             objDH.SanPhamId = req.body.SanPhamId;
-    
+
             objRes.data = await objDH.save();
             objRes.msg = "Thêm thành công";
             objRes.status = 1;
