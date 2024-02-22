@@ -1,10 +1,8 @@
 
 var md = require('../modal/taikhoan.modal');
 var md1 = require('../modal/admin.modal');
-
 exports.tkList = async(req,res,next) =>{
     // render ra view 
-
 
     let list = null;
     let sl = await md.tkModal.find().count();
@@ -177,7 +175,7 @@ exports.tkUp = async(req,res,next) =>{
 
 
 exports.Login = async(req,res,next)=>{
-
+   
     let msg = '';
     if(req.method == 'POST'){
         try {

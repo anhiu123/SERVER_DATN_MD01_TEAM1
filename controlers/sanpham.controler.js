@@ -97,27 +97,21 @@ exports.DHDetail = async (req,res,next) =>{
     if (req.method == "POST") {
       //  console.log(listmauSP + " thuộc tính sp  ");
         if (req.body.status == "Đã giao") {
-            let listspg = [];
-           
             try {
+                // them số lượng 
+                listspd.forEach(async spd => {
+                    let foundProduct = listsp.find(sp => sp._id.toString() === spd.SanPhamId.toString());
+                    
+                    if (foundProduct && spd.DonHangId.toString() === id_dh.toString()) {
+                        foundProduct.quantitySold += parseInt(spd.SoLuong);
+                        await md.spModal.findByIdAndUpdate(foundProduct._id, { quantitySold: foundProduct.quantitySold });
+                    }
+                });
+                
                 // Lặp qua mỗi phần tử trong listspd
                 listspd.forEach(spd => {
                     // Kiểm tra xem SanPhamId có tồn tại trong listsp hay không
-                    let foundProduct = listsp.find(sp => sp._id.toString() === spd.SanPhamId.toString());
-                    if (foundProduct) {
-                        listspg.push(foundProduct);
-                    }
-                    listspg.forEach(spg => {
-                            if(spd.SanPhamId.toString() == spg._id.toString()){
-
-                          
-                        (async () => {
-                            spg.quantitySold = spg.quantitySold + spd.SoLuong;
-                            await md.spModal.findByIdAndUpdate(spg._id, spg);
-                        })();
-                    }
-
-                    });
+                 
                     listmauSP.forEach(msp => {
                                 msp.sizes.forEach(sz => {
                                     if(sz._id.toString() == spd.IdThuocTinh.toString()){
