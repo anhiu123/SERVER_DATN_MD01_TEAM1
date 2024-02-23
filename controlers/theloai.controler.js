@@ -54,9 +54,10 @@ exports.tlAdd = async (req,res,next) =>{
         // làm tương tự với các validate khác 
         try {
             // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
-            const existingCate = await md1.tlModal.findOne({ name: req.body.name, image:"http://localhost:3000/uploads/" + req.file.originalname });
+            const existingCate = await md1.tlModal.findOne({ name: req.body.name});
+            const existingCate1 = await md1.tlModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
         
-            if (existingCate) {
+            if (existingCate || existingCate1) {
                 // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
                 msg = "Đã Có Thể Loại Này";
             } else {
@@ -122,17 +123,49 @@ exports.tlUp = async (req,res,next) =>{
                 msg = "Tên Thể Loại phải nhập ít nhất 1 kí tự ";    
                 validate  = false;       
             }
-            // tạo đối tượng lưu csdl 
-            if(validate){
-                let objtl_2  = {};
-                objtl_2.name = name;
 
-                // tìm theo chuỗi id và update 
-                await md1.tlModal.findByIdAndUpdate(id_tl,objtl_2);
-                msg = ' cập nhật thành công !';
+            try {
+                fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
+        
+                    if(err){
+                        console.log(err);
+                    }else{
+                        console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+                    }
+        
+                })
+              } catch (error) {
+                
+              }
 
-               
+              try {
+                // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+                const existingCate = await md1.tlModal.findOne({ name: req.body.name});
+                const existingCate1 = await md1.tlModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+            
+                if (existingCate || existingCate1) {
+                    // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                    msg = "Đã Có Thể Loại Này";
+                } else {
+                    // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                    if(validate){
+                        let objtl_2  = {};
+                        objtl_2.name = name;
+                        objtl_2.image = "http://localhost:3000/uploads/" + req.file.originalname ;
+        
+                        // tìm theo chuỗi id và update 
+                        await md1.tlModal.findByIdAndUpdate(id_tl,objtl_2);
+                        msg = ' cập nhật thành công !';
+        
+                       
+                    }
+                }
+            } catch (err) {
+                msg = "Lỗi : " + err.message;
             }
+
+            // tạo đối tượng lưu csdl 
+           
         };  
         objtl = await md1.tlModal.findById(dieukien);
     } catch (error) {

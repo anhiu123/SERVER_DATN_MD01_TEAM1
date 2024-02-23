@@ -16,6 +16,6 @@ router.get('/deletel/:id_tl',checkLG.yeu_cau_login, tl.tlDel);
 router.post('/deletel/:id_tl',checkLG.yeu_cau_login, tl.tlDel);
 
 router.get('/updatel/:id_tl',checkLG.yeu_cau_login, tl.tlUp);
-router.post('/updatel/:id_tl',checkLG.yeu_cau_login, tl.tlUp);
+router.post('/updatel/:id_tl', objUpload.single('anh'),checkLG.yeu_cau_login, tl.tlUp);
 
 module.exports = router;

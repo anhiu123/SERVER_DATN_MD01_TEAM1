@@ -180,17 +180,7 @@ exports.DHDetail = async (req,res,next) =>{
     console.log( req.session  );
     listmau = await Mau.mauModal.find();
     if(req.method == 'POST'){
-        // validate đơn giản : 
-        // if(req.body.name.length<5){
-        //     msg = "Tên Sản Phẩm phải nhập ít nhất 5 kí tự ";
-        //     return  res.render('sanpham/add',{msg:msg});
-        // }
-        // if(req.body.mota.length ==0 || req.body.price.length ==0 || req.body.loai.length ==0){
-        //     msg = "Không Được Để Trống";
-        //     return  res.render('sanpham/add',{msg:msg});
-        // }
-        // làm tương tự với các validate khác 
-
+     
 
       try {
         fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
@@ -205,24 +195,40 @@ exports.DHDetail = async (req,res,next) =>{
       } catch (error) {   
       }
 
-        // dưới này ghi csdl 
-        try{
-            // tạo đối tượng ghi vào csdl
-            const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
-            let objsp = new md.spModal();
-            objsp.name = req.body.name;
-             objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
-            objsp.mota = req.body.mota;
-            objsp.price = req.body.price;
-            objsp.loai = req.body.loai;
-            objsp.timeCreate = fullDateTimeString;
-            objsp.quantitySold = 0;
-            await objsp.save();
-            msg = " Thêm Sản Phẩm  thành CÔng";
-            console.log( req.session.addSP = objsp );
-        }catch(err){
-            msg = " Lỗi : " +err.message;
+      try {
+        // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+        const existingSP = await md.spModal.findOne({ name: req.body.name});
+        const existingSP1 = await md.spModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+      
+
+        if (existingSP || existingSP1) {
+            // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+            msg = "Đã Có Sản Phẩm Này";
+        } else {
+            // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+            try{
+                // tạo đối tượng ghi vào csdl
+                const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
+                let objsp = new md.spModal();
+                objsp.name = req.body.name;
+                 objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
+                objsp.mota = req.body.mota;
+                objsp.price = req.body.price;
+                objsp.loai = req.body.loai;
+                objsp.timeCreate = fullDateTimeString;
+                objsp.quantitySold = 0;
+                await objsp.save();
+                msg = " Thêm Sản Phẩm  thành CÔng";
+                console.log( req.session.addSP = objsp );
+            }catch(err){
+                msg = " Lỗi : " +err.message;
+            }
         }
+    } catch (err) {
+        msg = "Lỗi : " + err.message;
+    }
+        // dưới này ghi csdl 
+     
         
 
     }
@@ -351,7 +357,6 @@ exports.spUpdate = async (req,res,next) =>{
     let msg = '' ;
     let dieukien = {_id:id_sp};
    
-   
     try {
         // xử lí sư kiện post 
         if(req.method=='POST'){
@@ -363,10 +368,7 @@ exports.spUpdate = async (req,res,next) =>{
                 }else{
                     console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
                 }
-    
             })
-
-
             let name = req.body.name;
             let image = "http://localhost:3000/uploads/" + req.file.originalname;
             let mota = req.body.mota;
@@ -378,21 +380,33 @@ exports.spUpdate = async (req,res,next) =>{
                 msg = "Không Được Để Trống ";    
                 validate  = false;       
             }
-            // tạo đối tượng lưu csdl 
-            if(validate){
-                let objSp_2  = {};
-                objSp_2.name = name;
-                objSp_2.image = image;
-                objSp_2.mota = mota;
-                objSp_2.loai = loai;
-                objSp_2.price = price;
+            try {
+                // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+                const existingSP = await md.spModal.findOne({ name: req.body.name});
+                const existingSP1 = await md.spModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
               
-                // tìm theo chuỗi id và update 
-                await md.spModal.findByIdAndUpdate(id_sp,objSp_2);
-                msg = ' cập nhật thành công !';
-
-               
+                if (existingSP || existingSP1) {
+                    // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                    msg = "Đã Có Sản Phẩm Này";
+                } else {
+                    // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                    if(validate){
+                        let objSp_2  = {};
+                        objSp_2.name = name;
+                        objSp_2.image = image;
+                        objSp_2.mota = mota;
+                        objSp_2.loai = loai;
+                        objSp_2.price = price;
+                      
+                        // tìm theo chuỗi id và update 
+                        await md.spModal.findByIdAndUpdate(id_sp,objSp_2);
+                        msg = ' cập nhật thành công !';
+                    } 
+                }
+            } catch (err) {
+                msg = "Lỗi : " + err.message;
             }
+            // tạo đối tượng lưu csdl 
         };  
         objSp = await md.spModal.findById(dieukien);
     } catch (error) {
@@ -401,6 +415,19 @@ exports.spUpdate = async (req,res,next) =>{
     res.render('sanpham/update',{msg:msg,obj:objSp});
 
 }
+
+
+   // validate đơn giản : 
+        // if(req.body.name.length<5){
+        //     msg = "Tên Sản Phẩm phải nhập ít nhất 5 kí tự ";
+        //     return  res.render('sanpham/add',{msg:msg});
+        // }
+        // if(req.body.mota.length ==0 || req.body.price.length ==0 || req.body.loai.length ==0){
+        //     msg = "Không Được Để Trống";
+        //     return  res.render('sanpham/add',{msg:msg});
+        // }
+        // làm tương tự với các validate khác 
+
 
 
 

@@ -35,6 +35,7 @@ exports.addSPG = async (req,res,next)=>{
             objDH.ColorCode = req.body.ColorCode;
             objDH.Size = req.body.Size;
             objDH.SoLuong = req.body.SoLuong;
+            objDH.IdThuocTinh =req.body.IdThuocTinh;
     
             objRes.data = await objDH.save();
             objRes.msg = "Thêm thành công";

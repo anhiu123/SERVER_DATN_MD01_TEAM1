@@ -82,18 +82,34 @@ exports.mUp = async (req,res,next) =>{
                 msg = "Không Được Để Trống ";    
                 validate  = false;       
             }
-            // tạo đối tượng lưu csdl 
-            if(validate){
-                let objtl_2  = {};
-                objtl_2.name = name;
-                objtl_2.colorcode = colorcode;
 
-                // tìm theo chuỗi id và update 
-                await md1.mauModal.findByIdAndUpdate(id_m,objtl_2);
-                msg = ' cập nhật thành công !';
-
-               
+            
+        try {
+            // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+            const existingCate = await md1.mauModal.findOne({ name: req.body.name});
+            const existingCate1 = await md1.mauModal.findOne({ colorcode: req.body.colorcode});
+            if (existingCate || existingCate1) {
+                // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                msg = "Đã Có Màu Này";
+            } else {
+                // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                if(validate){
+                    let objtl_2  = {};
+                    objtl_2.name = name;
+                    objtl_2.colorcode = colorcode;
+    
+                    // tìm theo chuỗi id và update 
+                    await md1.mauModal.findByIdAndUpdate(id_m,objtl_2);
+                    msg = ' cập nhật thành công !';
+    
+                   
+                }
             }
+        } catch (err) {
+            msg = "Lỗi : " + err.message;
+        }
+            // tạo đối tượng lưu csdl 
+           
         };  
         objtl = await md1.mauModal.findById(dieukien);
     } catch (error) {

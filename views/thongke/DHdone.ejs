@@ -132,12 +132,12 @@
                         <th>ID</th>  
                         <th>Tên Sản Phẩm</th> 
                         <th>Ảnh</th>
-                        <th>Mô Tả</th>
                         <th>Giá</th>
                         <th>Loại</th>
                         <th>Màu Sắc</th>
                         <th>Size </th>
                         <th>Số Lượng </th>
+                        <th>Thành Tiền  </th>
                     </tr>
                    <% let totalAmount = 0; %>
                     <% listspd.forEach((spdItem) => { %>
@@ -148,7 +148,7 @@
                                 <td><%= product._id %></td>
                                 <td><%= product.name %></td>
                                 <td><img src="<%= product.image %>" style="width: 130px; height: 70px;" alt=""></td>
-                                <td><%= product.mota %></td>
+                               
                                 <td><%= product.price %></td>
                                 <td><%= product.loai %></td>
                                 <td>
@@ -165,6 +165,7 @@
                                 </td>
                                 <td><%= spdItem.Size %></td>
                                 <td><%= spdItem.SoLuong %></td>
+                                <td><%= spdItem.SoLuong * product.price %> </td>
                             </tr>
                         <% } %>
                     <% }); %>
