@@ -112,6 +112,7 @@
                     <th>Tên Người Dùng</th>
                     <th>Ngày Đặt</th>
                     <th>Trạng Thái</th>
+                    <th>Thanh Toán</th>
                     <th>Chi Tiết Đơn Hàng</th>
               
                   </tr>
@@ -137,7 +138,9 @@
                          
                         </select>
                         
-                      
+                        <td>
+                          <%= item.PTTT %>
+                        </td>
                         </td> 
 
                         <td><a href="/sanpham/dhdetail/<%= item._id %>">Chi Tiết</a></td>

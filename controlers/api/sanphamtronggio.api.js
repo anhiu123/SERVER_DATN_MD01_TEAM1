@@ -31,10 +31,10 @@ exports.addSPG = async (req,res,next)=>{
             
             let objDH = new  md.SPGModal();
             objDH.CartId = req.body.CartId;
-            objDH.SanPhamId = req.body.SanPhamId;
+            objDH.ProductId = req.body.ProductId;
             objDH.ColorCode = req.body.ColorCode;
             objDH.Size = req.body.Size;
-            objDH.SoLuong = req.body.SoLuong;
+            objDH.Quantity = req.body.Quantity;
             objDH.IdThuocTinh =req.body.IdThuocTinh;
     
             objRes.data = await objDH.save();

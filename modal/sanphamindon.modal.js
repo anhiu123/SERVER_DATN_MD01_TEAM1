@@ -3,12 +3,15 @@ var db = require('./db');
 
 var SPDSchema = new db.mongoose.Schema(
     {
-        DonHangId :{ type :String, require:true},
-        SanPhamId :{ type :String, require:true},
+        OrderId :{ type :String, require:true},
+        ProductId :{ type :String, require:true},
         ColorCode :{ type :String, require:true},
         Size :{ type :String, require:true},
-        SoLuong :{ type :Number, require:true},
-        IdThuocTinh: { type :String, require:true},
+        Quantity :{ type :Number, require:true},
+        PropertiesId: { type :String, require:true},
+        Image: { type :String, require:true},
+
+        // DonHangId     SanPhamId    SoLuong   IdThuocTinh
     },
     {
         collection :'SanPhamTrongDon'

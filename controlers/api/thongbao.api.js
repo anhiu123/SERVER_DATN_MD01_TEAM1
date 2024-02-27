@@ -44,3 +44,22 @@ exports.addTB = async (req,res,next)=>{
         return res.json(objRes);
         
 }
+
+exports.getCTTB = async (req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: []
+        };  
+        let id_tb = req.params.id;
+        try{
+        objRes.data = await md.ThongBaoModal.findById(id_tb);
+        objRes.msg = "Lấy dữ liệu thành công";
+        }catch(err){
+        console.log(err);
+        objRes.msg = err.message;
+        }
+        res.json(objRes.data);
+        
+}

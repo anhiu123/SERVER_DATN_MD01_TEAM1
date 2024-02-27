@@ -28,6 +28,17 @@
   margin-top: 40px;
   margin-bottom: 10px;
 }
+.mota-short {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mota-full {
+  display: none;
+}
+
 
 
   
@@ -155,10 +166,11 @@
                           <th>Màu Sắc </th>
                           <th>Size Sản Phẩm  aaaaaaaaaaaaaaaaaaaaâaaaaa</th>
                           <th>Thêm Màu   </th>
+                          <th>Sửa </th>
                           <!-- <th>Thêm Size   </th> -->
                           <th>Số Lượng Bán    </th>
                           <th>  Thời Gian Tạo    </th>
-                          <th>Sửa </th>
+                       
                   </tr>
 
                   <h2>Tổng Số Sản Phẩm : <%= sl %> </h2>
@@ -173,10 +185,7 @@
                     <button  type="submit" class="btn btn-primary ms-3 mb-2">Tìm Kiếm</button> 
                    </form>
                    <br>    
-                
-      
                   <% listsp.forEach((item)=>{ %>
-      
                       <tr>
                           <td class="text-center"><%= item._id %></td> 
                             <td class="text-center"><%= item.name %></td>  
@@ -188,16 +197,16 @@
                                   <% } %>
                               <% }); %>
                               </td>
-                              <td class="text-center"><%= item.mota %></td>
+                              <td class="text-center"><%= item.describe %></td>
                               <td class="text-center"><%= item.price %></td>
-                              <td class="text-center"><%= item.loai %></td>
+                              <td class="text-center"><%= item.category %></td>
                               <td class="text-center">
                                 <% listmauSP.forEach((mau) => { %>
                                   <% if (mau.productId.toString() === item._id.toString()) { %>
                                       <% mauList.forEach((mauInfo) => { %>
                                           <% if (mauInfo._id.toString() === mau.colorId.toString()) { %>
                                               
-                                              <div class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></div>
+                                              <a href="/sanpham/updatemau/<%= mau._id %>/<%= item._id %>"  class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></a>
                                           <% } %>
                                       <% }); %>                               
                                   <% } %>
@@ -214,31 +223,20 @@
                                   <% }); %>
                               </div>
                           </td>
-                          
-                          
-                          
-                          
                               <td class="text-center"><a href="/sanpham/addmau/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToj0igxTpTwdlpv19tJIK9o1HDY9G-M0SLSg&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
                               </td>
-                               
-                                 
-                            
-
-                                    <td><%= item.quantitySold %></td>
-                                    <td><%= item.timeCreate %></td>
                               <td>
                                 <a href="/sanpham/update/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfBR4wCLos45ns7dyxbE0m2-T6RfhzuHt5Ew&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
-                              </td>
+                              </td>  
+                                    <td><%= item.quantitySold %></td>
+                                  
+                                    <td><%= item.timeCreate %></td>
                               
-                            
                       </tr>
       
                   <% }) %>
               </table>
-
-
             </div></div>
-           
             <div class=" col-12           col-md-2 d-none d-md-block"></div>
             <div class=" col-12 ">
               <img style="margin-left: 800px;margin-top: 50;" src="https://tse3.mm.bing.net/th?id=OIP.vR3c8gJDtTZuFFJLa3nHcwAAAA&pid=Api&P=0&h=180" alt="Mô tả ảnh" width="200" height="150">
@@ -254,6 +252,7 @@
     <script src="/bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
 </body>
 </html>
+
 
 <!-- <form>
   <div class="input-group">

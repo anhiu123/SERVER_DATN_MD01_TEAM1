@@ -5,7 +5,7 @@ var apiDH = require('../../controlers/api/donhang.api');
 
 router.get('/', apiDH.getDH);
 
-router.get('/SPD', apiDH.getSPDH);
+router.get('/SPD/:id', apiDH.getSPDH);
 
 router.get('/add', apiDH.addDH);
 

@@ -35,7 +35,7 @@ exports.spList = async (req, res, next) => {
             listmauSP = await mdMauSanPham.mauSPModal.find();
             mauList = await Mau.mauModal.find();
             // Nếu có loaiChon, lọc danh sách sản phẩm theo loại chọn
-            list = await md.spModal.find({ loai: loaiChon })
+            list = await md.spModal.find({ category: loaiChon })
         }
         msg = 'Lấy Dữ Liệu Thành CÔNG';
     } catch (error) {
@@ -81,7 +81,7 @@ exports.DHDetail = async (req,res,next) =>{
     let listm = null;
 
     try {
-            listspd = await mdSPD.SPHModal.find({DonHangId : id_dh});
+            listspd = await mdSPD.SPHModal.find({OrderId : id_dh});
             listmauSP = await mdMauSanPham.mauSPModal.find();
             listDH = await mdDH.DonHangModal.find({_id  : id_dh });
             listsp = await md.spModal.find();
@@ -100,10 +100,10 @@ exports.DHDetail = async (req,res,next) =>{
             try {
                 // them số lượng 
                 listspd.forEach(async spd => {
-                    let foundProduct = listsp.find(sp => sp._id.toString() === spd.SanPhamId.toString());
+                    let foundProduct = listsp.find(sp => sp._id.toString() === spd.ProductId.toString());
                     
-                    if (foundProduct && spd.DonHangId.toString() === id_dh.toString()) {
-                        foundProduct.quantitySold += parseInt(spd.SoLuong);
+                    if (foundProduct && spd.OrderId.toString() === id_dh.toString()) {
+                        foundProduct.quantitySold += parseInt(spd.Quantity);
                         await md.spModal.findByIdAndUpdate(foundProduct._id, { quantitySold: foundProduct.quantitySold });
                     }
                 });
@@ -114,9 +114,9 @@ exports.DHDetail = async (req,res,next) =>{
                  
                     listmauSP.forEach(msp => {
                                 msp.sizes.forEach(sz => {
-                                    if(sz._id.toString() == spd.IdThuocTinh.toString()){
+                                    if(sz._id.toString() == spd.PropertiesId.toString()){
                                         (async () => {
-                                        sz.quantity  =   sz.quantity  - spd.SoLuong;   
+                                        sz.quantity  =   sz.quantity  - spd.Quantity;   
                                         await mdMauSanPham.mauSPModal.findByIdAndUpdate(msp._id, msp);
                                     })();
                             }
@@ -212,16 +212,16 @@ exports.DHDetail = async (req,res,next) =>{
                 let objsp = new md.spModal();
                 objsp.name = req.body.name;
                  objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
-                objsp.mota = req.body.mota;
+                objsp.describe = req.body.describe;
                 objsp.price = req.body.price;
-                objsp.loai = req.body.loai;
+                objsp.category = req.body.loai;
                 objsp.timeCreate = fullDateTimeString;
                 objsp.quantitySold = 0;
                 await objsp.save();
                 msg = " Thêm Sản Phẩm  thành CÔng";
                 console.log( req.session.addSP = objsp );
             }catch(err){
-                msg = " Lỗi : " +err.message;
+                msg = " Lỗi : Bạn Chưa Chọn Ảnh" ;
             }
         }
     } catch (err) {
@@ -289,7 +289,7 @@ exports.spAddMau = async(req,res,next) =>{
                 msg = "Thêm Màu Sản Phẩm thành CÔng";
             }
         } catch (err) {
-            msg = "Lỗi : " + err.message;
+            msg = "Lỗi : Chưa Chọn Ảnh " ;
         }
     }
     res.render('sanpham/addmau',{listmau:listmau,objU:objU,msg:msg});
@@ -297,12 +297,39 @@ exports.spAddMau = async(req,res,next) =>{
 exports.spSearch = async (req,res,next) =>{
     // render ra view 
 
+    const loaiChon = req.query.loai;
+    const role1 = req.query.role;
+    let listloai = null;
     let msg = '';
     let list = null;
+    let sl = await md.spModal.find().count();
+    let listmauSP = null;
+  
+
+    listloai = await md1.tlModal.find();
+    let mauList = null;
 
     let objU = req.session.userLogin;
 
     try {
+        // Nếu loaiChon không được chọn, lấy toàn bộ danh sách sản phẩm
+        if (!loaiChon) {
+            listmauSP = await mdMauSanPham.mauSPModal.find();
+            mauList = await Mau.mauModal.find();
+            list = await md.spModal.find();
+        } else {
+            listmauSP = await mdMauSanPham.mauSPModal.find();
+            mauList = await Mau.mauModal.find();
+            // Nếu có loaiChon, lọc danh sách sản phẩm theo loại chọn
+            list = await md.spModal.find({ category: loaiChon })
+        }
+        msg = 'Lấy Dữ Liệu Thành CÔNG';
+    } catch (error) {
+        console.log(error);
+        msg = error.message;
+    }
+
+    try {loai
         let timKiem = req.query.name; // Lấy từ query parameter
         let query = {}; // Đây là đối tượng truy vấn MongoDB trống ban đầu
     
@@ -323,13 +350,14 @@ exports.spSearch = async (req,res,next) =>{
     
 
 
-    res.render('sanpham/search',{msg:msg,list:list,objU:objU});
+    res.render('sanpham/search', { listsp: list, msg: msg, sl: sl, role: role1, listloai: listloai, objU: objU ,listmauSP:listmauSP,mauList:mauList});
+    //
 
 }
 exports.spDel = async (req,res,next) =>{
 
     let id_sp = req.params.id_sp;
-    let objSp =  {_id:'',name:'',image:'',mota:'',loai:'',price:0};
+    let objSp =  {_id:'',name:'',image:'',describe:'',category:'',price:0};
     let dieukien = {_id:id_sp};
 
     objSp = await md.spModal.findById(dieukien);
@@ -353,7 +381,7 @@ exports.spDel = async (req,res,next) =>{
 exports.spUpdate = async (req,res,next) =>{
 
     let id_sp = req.params.id_sp;
-    let objSp =  {_id:'',name:'',image:'',mota:'',loai:'',price:0};
+    let objSp =  {_id:'',name:'',image:'',describe:'',category:'',price:0};
     let msg = '' ;
     let dieukien = {_id:id_sp};
    
@@ -371,12 +399,12 @@ exports.spUpdate = async (req,res,next) =>{
             })
             let name = req.body.name;
             let image = "http://localhost:3000/uploads/" + req.file.originalname;
-            let mota = req.body.mota;
+            let describe = req.body.describe;
             let loai = req.body.loai;
             let price = req.body.price;
             let validate = true;
 
-            if(req.body.name.length ==0 || req.body.mota.length ==0 || req.body.loai.length ==0 || req.body.price.length ==0){
+            if(req.body.name.length ==0 || req.body.describe.length ==0 || req.body.loai.length ==0 || req.body.price.length ==0){
                 msg = "Không Được Để Trống ";    
                 validate  = false;       
             }
@@ -394,8 +422,8 @@ exports.spUpdate = async (req,res,next) =>{
                         let objSp_2  = {};
                         objSp_2.name = name;
                         objSp_2.image = image;
-                        objSp_2.mota = mota;
-                        objSp_2.loai = loai;
+                        objSp_2.describe = describe;
+                        objSp_2.category = loai;
                         objSp_2.price = price;
                       
                         // tìm theo chuỗi id và update 
@@ -416,7 +444,69 @@ exports.spUpdate = async (req,res,next) =>{
 
 }
 
+exports.spUpTT  =async  (req,res,next) =>{ 
+    let objU = req.session.userLogin;
+    let msg = "";
+    let listmau = null;
+    listmau = await Mau.mauModal.find();
+    let objMsp = {};
+    let id_msp = req.params.id_msp;
+    let id_sp = req.params.id_sp;
+    let dieukien = {_id:id_msp};
+ 
+    try {
+        const sizes = [
+            { size: "S", quantity: req.body.sizeS },
+            { size: "M", quantity: req.body.sizeM },
+            { size: "L", quantity: req.body.sizeL },
+            { size: "XL", quantity: req.body.sizeXL }
+          ];
+        // xử lí sư kiện post 
+        if(req.method=='POST'){
 
+            fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
+
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+                }
+            })
+            let image = "http://localhost:3000/uploads/" + req.file.originalname;
+            let validate = true;
+
+            try {
+                // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+                const existingColor = await mdMauSanPham.mauSPModal.findOne({ productId: id_sp, colorId: req.body.mau });
+                const existingSP1 = await mdMauSanPham.mauSPModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+              
+                if (  existingSP1 || existingColor) {
+                    // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                    msg = "Đã Có Thuộc Tính Này";
+                } else {
+                    // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                    if(validate){
+                        let objTT  = {};
+                        objTT.colorId  = req.body.mau;
+                        objTT.image = "http://localhost:3000/uploads/" + req.file.originalname;
+                        objTT.sizes = sizes;
+            
+                        // tìm theo chuỗi id và update 
+                        await mdMauSanPham.mauSPModal.findByIdAndUpdate(id_msp,objTT);
+                        msg = ' cập nhật thành công !';
+                    } 
+                }
+            } catch (err) {
+                msg = "Lỗi : " + err.message;
+            }
+            // tạo đối tượng lưu csdl 
+        };  
+        objMsp = await mdMauSanPham.mauSPModal.findById(dieukien);
+    } catch (error) {
+        msg = error.message;
+    }
+  res.render('sanpham/suamau',{listmau:listmau,objU:objU,msg:msg ,objMsp:objMsp})
+ }
    // validate đơn giản : 
         // if(req.body.name.length<5){
         //     msg = "Tên Sản Phẩm phải nhập ít nhất 5 kí tự ";

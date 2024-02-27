@@ -7,7 +7,8 @@ var tkSchema = new db.mongoose.Schema(
         passwd  : {type : String,require:true},
         email :{ type :String, require:true},
         image : { type : String,require:true},
-        address : { type : String ,require:true}
+        address : { type : String ,require:true},
+        numberPhone : { type : Number ,require:true}
     },
     {
         collection :'NguoiDung'

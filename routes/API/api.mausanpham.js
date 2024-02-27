@@ -6,4 +6,6 @@ var apiSP = require('../../controlers/api/mausanpham.api');
 
 router.get('/', apiSP.getMau);
 
+router.get('/:id', apiSP.getCTMau);
+
 module.exports = router;

@@ -9,7 +9,7 @@ exports.addSP = async (req, res, next) => {
             msg = "Tên Sản Phẩm phải nhập ít nhất 5 kí tự ";
             return  res.render('sanpham/add',{msg:msg,list:listloai,objU:objU});
         }
-        if(req.body.mota.length ==0 || req.body.price.length ==0 || req.body.loai.length ==0){
+        if(req.body.describe.length ==0 || req.body.price.length ==0 || req.body.loai.length ==0){
             msg = "Không Được Để Trống";
             return  res.render('sanpham/add',{msg:msg,list:listloai,objU:objU});
         }

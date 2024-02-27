@@ -38,8 +38,8 @@
            
             </div>
           
-            <div class="ms-4 ms-4"><h1> Thêm Thuộc Tính Sản Phẩm </h1>
-              <a href="/sanpham">Sản Phẩm/</a>
+            <div class="ms-4 ms-4"><h1> Sửa Thuộc Tính Sản Phẩm </h1>
+              <a href="/sanpham">Sản/</a>
             
             
             
@@ -64,19 +64,19 @@
                           <input type="file" class="form-control , mb-3" name="anh">
 
                           <label for="sizeS">Size S:</label>
-                          <input type="number" id="sizeS" name="sizeS" min="0" value="1" max="99">
+                          <input type="number" id="sizeS" name="sizeS" min="0" value="<%= objMsp.sizes.find(size => size.size === 'S').quantity %>" max="99">
                           <br>
                   
                           <label for="sizeM">Size M:</label>
-                          <input type="number" id="sizeM" name="sizeM" min="0" value="1" max="99">
+                          <input type="number" id="sizeM" name="sizeM" min="0" value="<%= objMsp.sizes.find(size => size.size === 'M').quantity %>" max="99">
                           <br>
                   
                           <label for="sizeL">Size L:</label>
-                          <input type="number" id="sizeL" name="sizeL" min="0" value="1" max="99">
+                          <input type="number" id="sizeL" name="sizeL" min="0" value="<%= objMsp.sizes.find(size => size.size === 'L').quantity %>" max="99">
                           <br>
                   
                           <label for="sizeXL">Size XL:</label>
-                          <input type="number" id="sizeXL" name="sizeXL" min="0" value="1" max="99">
+                          <input type="number" id="sizeXL" name="sizeXL" min="0" value="<%= objMsp.sizes.find(size => size.size === 'XL').quantity %>" max="99">
                           <br>
                   
 

@@ -7,4 +7,6 @@ router.get('/', apiDG.getDG);
 
 router.post('/', apiDG.addDG);
 
+router.get('/:id', apiDG.getCTDG);
+
 module.exports = router;

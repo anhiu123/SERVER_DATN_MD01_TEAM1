@@ -52,8 +52,9 @@ exports.getSPDH = async (req,res,next)=>{
         status: 0,
         data: []
         };  
+        let id_dh = req.params.id;
         try{
-        objRes.data = await md1.SPHModal.find();
+        objRes.data = await md1.SPHModal.findOne({DonHangId:id_dh});
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);

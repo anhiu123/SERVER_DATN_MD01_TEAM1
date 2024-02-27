@@ -7,6 +7,43 @@
     <link rel="stylesheet" href="/bootstrap-5.3.0-dist/css/bootstrap.min.css">     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
+<style>
+  .color-box {
+    display: inline-block; /* Hiển thị các div theo chiều ngang */
+    width: 50px;
+    height: 50px;
+    margin-left: 10px; /* Khoảng cách giữa các div */
+}
+.dropdown-menu {
+  max-height: 200px; /* Đặt chiều cao tối đa của dropdown menu */
+  overflow-y: auto; /* Cho phép cuộn khi nội dung vượt quá chiều cao tối đa */
+}
+
+.size-container {
+display: flex;
+flex-wrap: wrap;
+}
+
+.size-item {
+margin-right: 10px;
+margin-top: 40px;
+margin-bottom: 10px;
+}
+.mota-short {
+display: block;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.mota-full {
+display: none;
+}
+
+
+
+
+</style>
 <body>
     
  <!-- khối 1  -->
@@ -78,17 +115,24 @@
             <div class=" col-12 col-sm-9 col-md-8">
               <div class="mt-5">
         
-                <table class="table" border="1" >
+                <table class=" table table-bordered  mx-auto" border="1" >
 
                   <tr>
-                      <th>ID</th>  
-                       <th>Tên Sản Phẩm</th> 
-                          <th>Ảnh</th>
-                          <th>Mô Tả</th>
-                          <th>Giá</th>
-                          <th>Loại </th>
-                          <th>Trang Thái </th>
-                  </tr>
+                    <th>ID</th>  
+                     <th>Tên Sản Phẩm</th> 
+                        <th>Ảnh</th>
+                        <th>Mô Tả</th>
+                        <th>Giá</th>
+                        <th>Loại </th>
+                        <th>Màu Sắc </th>
+                        <th>Size Sản Phẩm  aaaaaaaaaaaaaaaaaaaaâaaaaa</th>
+                        <!-- <th>Thêm Màu   </th>
+                        <th>Sửa </th> -->
+                        <!-- <th>Thêm Size   </th> -->
+                        <th>Số Lượng Bán    </th>
+                        <th>  Thời Gian Tạo    </th>
+                     
+                </tr>
 
                   <form action="" method="GET">
                     <div class="input-group">
@@ -100,20 +144,53 @@
                   </form>
                   <br>
 
-                  <% list.forEach((item)=>{ %>
-      
+                  <% listsp.forEach((item)=>{ %>
                     <tr>
-                        <td><%= item._id %></td> 
-                          <td><%= item.name %></td>  
-                            <td><img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""></td>
-                            <td><%= item.mota %></td>
-                            <td><%= item.price %></td>
-                            <td><%= item.loai %></td>
-                            <td><a href="/sanpham/delete/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.wCEHnDYSVK0S_ewpHgsY3QHaHV&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
-                              <a href="/sanpham/update/<%= item._id %>"><img src="https://tse1.mm.bing.net/th?id=OIP.FnU8so-q6D6zY926B2SpWgAAAA&pid=Api&P=0&h=180" style="width: 30px;height: 30px;" alt=""></a>
+                        <td class="text-center"><%= item._id %></td> 
+                          <td class="text-center"><%= item.name %></td>  
+                            <td class="text-center">
+                              <!-- <img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""> -->
+                              <% listmauSP.forEach((mau) => { %>
+                                <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
+                                  <img src="<%= mau.image %>" style="width: 130px;height: 70px; margin-top: 20px;" alt="">                                                                                                           
+                                <% } %>
+                            <% }); %>
                             </td>
+                            <td class="text-center"><%= item.describe %></td>
+                            <td class="text-center"><%= item.price %></td>
+                            <td class="text-center"><%= item.category %></td>
+                            <td class="text-center">
+                              <% listmauSP.forEach((mau) => { %>
+                                <% if (mau.productId.toString() === item._id.toString()) { %>
+                                    <% mauList.forEach((mauInfo) => { %>
+                                        <% if (mauInfo._id.toString() === mau.colorId.toString()) { %>
+                                            
+                                            <a href="/sanpham/updatemau/<%= mau._id %>/<%= item._id %>"  class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></a>
+                                        <% } %>
+                                    <% }); %>                               
+                                <% } %>
+                            <% }); %>
+                          </td>
+                          <td class="text-center">
+                            <div class="size-container">
+                                <% listmauSP.forEach((mau) => { %>
+                                    <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
+                                        <% mau.sizes.forEach(size => { %>
+                                            <div class="size-item"><%= size.size %> - <%= size.quantity %></div>
+                                        <% }) %>                                                                                               
+                                    <% } %>
+                                <% }); %>
+                            </div>
+                        </td>
+                            <!-- <td class="text-center"><a href="/sanpham/addmau/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToj0igxTpTwdlpv19tJIK9o1HDY9G-M0SLSg&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
+                            </td>
+                            <td>
+                              <a href="/sanpham/update/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfBR4wCLos45ns7dyxbE0m2-T6RfhzuHt5Ew&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
+                            </td>   -->
+                                  <td><%= item.quantitySold %></td>
+                                
+                                  <td><%= item.timeCreate %></td>
                             
-                          
                     </tr>
     
                 <% }) %>

@@ -4,10 +4,12 @@ var db = require('./db');
 var SPGSchema = new db.mongoose.Schema(
     {
         CartId :{ type :String, require:true},
-        SanPhamId :{ type :String, require:true},
+        ProductId :{ type :String, require:true},
         ColorCode :{ type :String, require:true},
         Size :{ type :String, require:true},
-        SoLuong :{ type :Number, require:true},
+        Quantity :{ type :Number, require:true},
+
+        // SoLuong    SanPhamId
     },
     {
         collection :'SanPhamTrongGio'

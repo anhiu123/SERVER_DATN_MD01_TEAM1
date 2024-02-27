@@ -31,6 +31,10 @@ router.post('/delete/:id_sp',checkLG.yeu_cau_login, sp.spDel);
 router.get('/addmau/:id_sp',checkLG.yeu_cau_login, sp.spAddMau);
 router.post('/addmau/:id_sp', objUpload.single('anh'),checkLG.yeu_cau_login, sp.spAddMau);
 
+router.get('/updatemau/:id_msp/:id_sp',checkLG.yeu_cau_login, sp.spUpTT);
+router.post('/updatemau/:id_msp/:id_sp', objUpload.single('anh'), checkLG.yeu_cau_login, sp.spUpTT);
+
+
 router.get('/update/:id_sp',checkLG.yeu_cau_login, sp.spUpdate);
 router.post('/update/:id_sp',checkLG.yeu_cau_login,objUpload.single('anh'), sp.spUpdate);
 

@@ -5,6 +5,8 @@ var router = express.Router();
 var apiTK = require('../../controlers/api/taikhoan.api');
 
 router.get('/', apiTK.getUsers);
+router.get('/admin', apiTK.getADmin);
+router.get('/:sdt', apiTK.layTK);
 
 router.post('/', apiTK.addUs);
 

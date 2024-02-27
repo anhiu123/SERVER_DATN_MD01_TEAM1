@@ -10,6 +10,8 @@ var apiSPL = require('../../controlers/api/sanphamlove.api');
 
 router.get('/', apiSP.getSP);
 
+router.get('/top8', apiSP.getSPTop);
+
 router.get('/SPG', apiSPG.getSPG);
 
 router.post('/SPG', apiSPG.addSPG);

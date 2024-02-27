@@ -4,7 +4,7 @@ var SPloveSchema = new db.mongoose.Schema(
 
         {
             UserId : { type:String, require:true },
-            SanPhamId :{ type :String, require:true},
+            ProductId :{ type :String, require:true},
         },
         {
             collection: 'SanPhamYeuThich'

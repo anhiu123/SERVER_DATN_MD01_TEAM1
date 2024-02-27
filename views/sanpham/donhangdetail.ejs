@@ -157,13 +157,13 @@
                     </tr>
                    <% let totalAmount = 0; %>
                     <% listspd.forEach((spdItem) => { %>
-                        <% let product = listsp.find(productItem => productItem._id.toString() === spdItem.SanPhamId.toString()) %>
+                        <% let product = listsp.find(productItem => productItem._id.toString() === spdItem.ProductId.toString()) %>
                         <% if (product) { %>
-                           <% totalAmount += product.price * spdItem.SoLuong; %>
+                           <% totalAmount += product.price * spdItem.Quantity; %>
                             <tr>
                                 <td><%= product._id %></td>
                                 <td><%= product.name %></td>
-                                <td><img src="<%= product.image %>" style="width: 130px; height: 70px;" alt=""></td>
+                                <td><img src="<%= spdItem.Image %>" style="width: 130px; height: 70px;" alt=""></td>
                               
                                 <td><%= product.price %></td>
                                 <td><%= product.loai %></td>
@@ -181,8 +181,8 @@
                                     <div class="color-box text-center" style="background-color: <%= '#' + spdItem.ColorCode %>; width: 50px; height: 50px;"></div>
                                 </td>
                                 <td><%= spdItem.Size %></td>
-                                <td><%= spdItem.SoLuong %></td>
-                                <td><%= spdItem.SoLuong * product.price %> </td>
+                                <td><%= spdItem.Quantity %></td>
+                                <td><%= spdItem.Quantity * product.price %> </td>
                             </tr>
                         <% } %>
                     <% }); %>

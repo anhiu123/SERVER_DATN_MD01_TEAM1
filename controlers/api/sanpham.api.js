@@ -27,7 +27,9 @@ exports.getSPTop = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.spModal.find();
+            const sortedProducts = await md.spModal.find().sort({ quantitySold: -1 });
+            const top4Products = sortedProducts.slice(0, 8);
+            objRes.data = top4Products;
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
@@ -135,23 +137,23 @@ exports.getSPTop = async (req,res,next)=>{
 // }
 
 exports.xemct1SP = async(req,res,next)=>{
-
-
     let objRes = {
         msg: '',
         status: 0,
         data: {}
         };
-
         let id_sp = req.params.id;
-
         try{
-            objRes.data = await md.spModal.findById(id_sp);
-            objRes.msg = "Lấy dữ liệu thành công";
+            if ( objRes.data = await md.spModal.findById(id_sp)) {
+               
+                objRes.msg = "Lấy dữ liệu thành công";
+            } else {
+                objRes.msg = "Lấy dữ liệu Thất Bại";
+            }
             }catch(err){
             console.log(err);
             objRes.msg = err.message;
             }
-            res.json(objRes);
+            res.json(objRes.data);
 
 }

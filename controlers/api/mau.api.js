@@ -17,3 +17,4 @@ exports.getMau = async (req,res,next)=>{
         res.json(objRes.data);
         
 }
+
