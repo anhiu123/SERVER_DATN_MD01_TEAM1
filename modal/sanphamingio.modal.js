@@ -8,6 +8,9 @@ var SPGSchema = new db.mongoose.Schema(
         ColorCode :{ type :String, require:true},
         Size :{ type :String, require:true},
         Quantity :{ type :Number, require:true},
+        PropertiesId: { type :String, require:true},
+        Image: { type :String, require:true},
+
 
         // SoLuong    SanPhamId
     },

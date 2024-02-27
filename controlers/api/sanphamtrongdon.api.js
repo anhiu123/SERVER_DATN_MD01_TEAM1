@@ -36,6 +36,7 @@ exports.addSPH = async (req,res,next)=>{
             objDH.Size = req.body.Size;
             objDH.Quantity = req.body.Quantity;
             objDH.PropertiesId =req.body.PropertiesId;
+            objDH.Image =req.body.Image;
     
             objRes.data = await objDH.save();
             objRes.msg = "Thêm thành công";
