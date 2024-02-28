@@ -329,7 +329,7 @@ exports.spSearch = async (req,res,next) =>{
         msg = error.message;
     }
 
-    try {loai
+    try {
         let timKiem = req.query.name; // Lấy từ query parameter
         let query = {}; // Đây là đối tượng truy vấn MongoDB trống ban đầu
     

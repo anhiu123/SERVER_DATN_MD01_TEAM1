@@ -17,6 +17,7 @@ var sizeRouter = require('./routes/size');
 var mauRouter = require('./routes/mau');
 var thongkeRouter = require('./routes/thongke');
 var chatRouter = require('./routes/chat');
+var voucherRouter = require('./routes/voucher');
 // var loginRouter = require('./routes/login');
 
 var apiSP = require('./routes/API/api.sanpham');
@@ -28,6 +29,8 @@ var apiDH = require('./routes/API/api.donhang');
 var apiDG = require('./routes/API/api.danhgia');
 var apiTB = require('./routes/API/api.thongbao');
 var apiTN = require('./routes/API/api.tinnhan');
+var apiDCGH = require('./routes/API/api.dcgh');
+var apiVC = require('./routes/API/api.voucher');
 
 var app = express();
 
@@ -60,6 +63,7 @@ app.use('/size', sizeRouter);
 app.use('/mau', mauRouter);
 app.use('/thongke', thongkeRouter);
 app.use('/chat', chatRouter);
+app.use('/voucher', voucherRouter);
 // app.use('/login', loginRouter);
 
 app.use('/api-sanpham', apiSP);
@@ -71,6 +75,8 @@ app.use('/api-donhang', apiDH);
 app.use('/api-danhgia', apiDG);
 app.use('/api-thongbao', apiTB);
 app.use('/api-tinnhan', apiTN);
+app.use('/api-dcgh', apiDCGH);
+app.use('/api-voucher', apiVC);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

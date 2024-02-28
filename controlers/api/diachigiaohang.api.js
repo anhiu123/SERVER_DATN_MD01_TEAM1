@@ -1,9 +1,7 @@
-var md = require('../../modal/donhang.modal');
+var md = require('../../modal/diachigiaohang.modal');
 const { param } = require('../../routes');
 
-var md1 = require('../../modal/sanphamindon.modal');
-
-exports.getDH = async (req,res,next)=>{
+exports.getDCGH = async (req,res,next)=>{
 
     let objRes = {
         msg: '',
@@ -11,7 +9,7 @@ exports.getDH = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.DonHangModal.find();
+        objRes.data = await md.DCGHModal.find();
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
@@ -21,7 +19,7 @@ exports.getDH = async (req,res,next)=>{
         
 }
 
-exports.addDH = async (req,res,next)=>{
+exports.addDCGH = async (req,res,next)=>{
 
     let objRes = {
                 msg: '',
@@ -31,11 +29,13 @@ exports.addDH = async (req,res,next)=>{
               
                 try {
                     
-                    let objDH = new  md.DonHangModal();
+                    let objDH = new  md.DCGHModal();
                     objDH.UserId = req.body.UserId;
-                    objDH.status = req.body.status;
-                    objDH.date = req.body.date;
-            
+                    objDH.name = req.body.name;
+                    objDH.city = req.body.city;
+                    objDH.street = req.body.street;
+                    objDH.phone = req.body.phone;
+
                     objRes.data = await objDH.save();
                     objRes.msg = "Thêm thành công";
                     objRes.status = 1;
@@ -45,16 +45,37 @@ exports.addDH = async (req,res,next)=>{
                 return res.json(objRes);
 }
 
-exports.getSPDH = async (req,res,next)=>{
+exports.dlDCGH = async (req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: {}
+        };
+        
+    let id = req.params.id;
+
+    try {
+     await md.DCGHModal.findByIdAndDelete(id);
+     objRes.msg = "Đã xóa thành công";
+        objRes.status = 1;    
+    } catch (error) {
+        objRes.msg = error.message;
+    }
+
+    res.json (objRes);
+}
+
+exports.getCTDCGH = async (req,res,next)=>{
 
     let objRes = {
         msg: '',
         status: 0,
         data: []
         };  
-        let id_dh = req.params.id;
+        let id_u = req.params.id;
         try{
-        objRes.data = await md1.SPHModal.findOne({DonHangId:id_dh});
+        objRes.data = await md.DCGHModal.findOne({UserId:id_u});
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
