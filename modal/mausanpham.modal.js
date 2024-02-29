@@ -10,8 +10,7 @@ var mauSPSchema = new db.mongoose.Schema(
                 ref: 'SanPham',
               },
               colorId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'MauSac',
+                type : String,require:true
               },
               image : { type : String,require:true},
               sizes: [

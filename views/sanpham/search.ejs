@@ -162,12 +162,10 @@ display: none;
                             <td class="text-center">
                               <% listmauSP.forEach((mau) => { %>
                                 <% if (mau.productId.toString() === item._id.toString()) { %>
-                                    <% mauList.forEach((mauInfo) => { %>
-                                        <% if (mauInfo._id.toString() === mau.colorId.toString()) { %>
+                                  
                                             
-                                            <a href="/sanpham/updatemau/<%= mau._id %>/<%= item._id %>"  class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mauInfo.colorcode %>; width: 50px; height: 50px;"></a>
-                                        <% } %>
-                                    <% }); %>                               
+                                            <a href="/sanpham/updatemau/<%= mau._id %>/<%= item._id %>"  class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mau.colorId %>; width: 50px; height: 50px;"></a>
+                                                             
                                 <% } %>
                             <% }); %>
                           </td>
