@@ -169,7 +169,7 @@ exports.layTK = async(req,res,next)=>{
         };
         let sdt = req.params.sdt;
         try{
-            if (  objRes.data = await md.tkModal.findById(sdt)) {
+            if (  objRes.data = await md.tkModal.findOne({numberPhone : sdt})) {
               
                 objRes.msg = "Lấy dữ liệu thành công";
             } else {
