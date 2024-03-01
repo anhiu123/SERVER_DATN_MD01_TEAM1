@@ -27,7 +27,7 @@ exports.getCTMau = async (req,res,next)=>{
         };  
         let id_sp = req.params.id;
         try{
-        objRes.data = await mdMau.mauSPModal.findOne({productId  : id_sp});
+        objRes.data = await mdMau.mauSPModal.find({productId  : id_sp});
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
