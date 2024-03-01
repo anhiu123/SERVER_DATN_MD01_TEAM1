@@ -7,6 +7,8 @@ var apiSPG = require('../../controlers/api/sanphamtronggio.api');
 
 var apiSPL = require('../../controlers/api/sanphamlove.api');
 
+var apiSPD = require('../../controlers/api/sanphamtrongdon.api');
+
 
 router.get('/', apiSP.getSP);
 
@@ -15,6 +17,10 @@ router.get('/top8', apiSP.getSPTop);
 router.get('/SPG', apiSPG.getSPG);
 
 router.post('/SPG', apiSPG.addSPG);
+
+router.get('/SPD', apiSPD.getSPH);
+
+router.post('/SPD', apiSPD.addSPH);
 
 
 router.delete('/:id', apiSPG.dltSPG);
