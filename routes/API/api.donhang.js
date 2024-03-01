@@ -7,6 +7,6 @@ router.get('/', apiDH.getDH);
 
 router.get('/SPD/:id', apiDH.getSPDH);
 
-router.get('/add', apiDH.addDH);
+router.post('/', apiDH.addDH);
 
 module.exports = router;

@@ -44,14 +44,6 @@ exports.addUs = async(req,res,next)=>{
         data: {}
         };
        
-        // if(req.body.username.length<5){
-        //     objRes.msg = "Username phải nhập ít nhất 5 ký tự";
-        // return res.json(objRes); // thoát khỏi hàm
-        // }
-        // if(req.body.passwd.length ==0 || req.body.email.length ==0 || req.body.role.length ==0){
-        //     objRes.msg = "Không Được Để Trống";
-        // return res.json(objRes); // thoát khỏi hàm
-        // }
         try {
             
             let objTK = new  md.tkModal();

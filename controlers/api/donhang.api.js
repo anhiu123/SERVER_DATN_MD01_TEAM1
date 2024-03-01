@@ -35,6 +35,7 @@ exports.addDH = async (req,res,next)=>{
                     objDH.UserId = req.body.UserId;
                     objDH.status = req.body.status;
                     objDH.date = req.body.date;
+                    objDH.PTTT = req.body.PTTT;
             
                     objRes.data = await objDH.save();
                     objRes.msg = "Thêm thành công";
@@ -42,7 +43,9 @@ exports.addDH = async (req,res,next)=>{
                 } catch (error) {
                     objRes.msg = error.message;
                 }
-                return res.json(objRes);
+                return res.json(objRes.data);
+
+
 }
 
 exports.getSPDH = async (req,res,next)=>{
