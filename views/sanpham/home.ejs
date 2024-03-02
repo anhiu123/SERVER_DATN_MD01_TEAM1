@@ -122,6 +122,8 @@
                     <th>Tên Người Dùng</th>
                     <th>Ngày Đặt</th>
                     <th>Trạng Thái</th>
+              
+                    <th>Địa Chỉ Giao Hàng </th>
                     <th>Thanh Toán</th>
                     <th>Chi Tiết Đơn Hàng</th>
               
@@ -147,7 +149,7 @@
                           <option value="<%= item.status %>"><%= item.status %></option>
                          
                         </select>
-                        
+                        <td>  <%= item.address %></td>
                         <td>
                           <%= item.PTTT %>
                         </td>

@@ -159,7 +159,7 @@
                     <% listspd.forEach((spdItem) => { %>
                         <% let product = listsp.find(productItem => productItem._id.toString() === spdItem.ProductId.toString()) %>
                         <% if (product) { %>
-                           <% totalAmount += product.price * spdItem.Quantity; %>
+                           <% totalAmount += product.price * spdItem.Quantity + 22000; %>
                             <tr>
                                 <td><%= product._id %></td>
                                 <td><%= product.name %></td>
@@ -182,11 +182,12 @@
                                 </td>
                                 <td><%= spdItem.Size %></td>
                                 <td><%= spdItem.Quantity %></td>
-                                <td><%= spdItem.Quantity * product.price %> </td>
+                                <td><%= spdItem.Quantity * product.price  %> </td>
                             </tr>
                         <% } %>
                     <% }); %>
                 </table>
+                <h1>Phí Giao Hàng : 22.000 VND</h1>
                 <h1>Tổng tiền: <%= totalAmount %> đ</h1>
 
 

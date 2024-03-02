@@ -7,6 +7,7 @@ var DonHangSchema = new db.mongoose.Schema(
             status : { type : String,require:true},
             date : { type : String,require:true},
             PTTT : { type : String,require:true},
+            address : { type : String,require:true},
           
         },
         {

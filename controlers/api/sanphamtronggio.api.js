@@ -35,7 +35,7 @@ exports.addSPG = async (req,res,next)=>{
             objDH.ColorCode = req.body.ColorCode;
             objDH.Size = req.body.Size;
             objDH.Quantity = req.body.Quantity;
-            objDH.IdThuocTinh =req.body.IdThuocTinh;
+            objDH.PropertiesId =req.body.PropertiesId;
             objDH.Image =req.body.Image;
     
             objRes.data = await objDH.save();
