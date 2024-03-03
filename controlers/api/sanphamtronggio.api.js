@@ -52,6 +52,8 @@ exports.addSPG = async (req,res,next)=>{
             objDH.CartId = req.body.CartId;
             objDH.ProductId = req.body.ProductId;
             objDH.ColorCode = req.body.ColorCode;
+            objDH.Name = req.body.Name;
+            objDH.Price = req.body.Price;
             objDH.Size = req.body.Size;
             objDH.Quantity = req.body.Quantity;
             objDH.PropertiesId =req.body.PropertiesId;
