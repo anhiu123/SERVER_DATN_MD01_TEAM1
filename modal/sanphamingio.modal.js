@@ -7,7 +7,7 @@ var SPGSchema = new db.mongoose.Schema(
         ProductId :{ type :String, require:true},
         ColorCode :{ type :String, require:true},
         Name :{ type :String, require:true},
-        Price :{ type :String, require:true},
+        Price :{ type :Number, require:true},
         ColorCode :{ type :String, require:true},
         Size :{ type :String, require:true},
         Quantity :{ type :Number, require:true},
