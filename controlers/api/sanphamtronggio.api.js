@@ -19,6 +19,25 @@ exports.getSPG = async (req,res,next)=>{
         
 }
 
+exports.getSPGID = async (req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: []
+        };  
+        try{
+            let id_u = req.params.id;
+        objRes.data = await md.SPGModal.find({CartId:id_u});
+        objRes.msg = "Lấy dữ liệu thành công";
+        }catch(err){
+        console.log(err);
+        objRes.msg = err.message;
+        }
+        res.json(objRes.data);
+        
+}
+
 exports.addSPG = async (req,res,next)=>{
 
     let objRes = {

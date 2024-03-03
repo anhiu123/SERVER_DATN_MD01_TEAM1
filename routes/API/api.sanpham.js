@@ -16,6 +16,8 @@ router.get('/top8', apiSP.getSPTop);
 
 router.get('/SPG', apiSPG.getSPG);
 
+router.get('/SPG/:id', apiSPG.getSPGID);
+
 router.post('/SPG', apiSPG.addSPG);
 
 router.get('/SPD', apiSPD.getSPH);
