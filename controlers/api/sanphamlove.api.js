@@ -1,4 +1,5 @@
 var md = require('../../modal/sanphamlove');
+var md1 = require('../../modal/sanpham.modal');
 const { param } = require('../../routes');
 
 exports.getSPL = async (req,res,next)=>{
@@ -9,7 +10,17 @@ exports.getSPL = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.SploveModal.find();
+        let id_u = req.params.id;
+        let listIdSP = null;
+        listIdSP = await md.SploveModal.find({UserId : id_u});
+
+        for (let i = 0; i < listIdSP.length; i++) {
+            let productId1 = listIdSP[i].ProductId;
+            let listPR = await md1.spModal.findOne({ _id: productId1 });
+            if (listPR) {
+                objRes.data.push(listPR);
+            }
+        }    
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
