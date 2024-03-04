@@ -18,6 +18,8 @@ router.get('/SPG', apiSPG.getSPG);
 
 router.get('/SPG/:id', apiSPG.getSPGID);
 
+router.get('/SPG/:id/:id_cl/:id_s', apiSPG.getSPGSS);
+
 router.post('/SPG', apiSPG.addSPG);
 
 router.get('/SPD', apiSPD.getSPH);

@@ -19,6 +19,27 @@ exports.getSPG = async (req,res,next)=>{
         
 }
 
+exports.getSPGSS = async (req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: []
+        };  
+        let id_sp = req.params.id;
+        let clcode = req.params.id_cl;
+        let size = req.params.id_s;
+        try{
+        objRes.data = await md.SPGModal.findOne({ProductId:id_sp , ColorCode:clcode,Size:size});
+        objRes.msg = "Lấy dữ liệu thành công";
+        }catch(err){
+        console.log(err);
+        objRes.msg = err.message;
+        }
+        res.json(objRes.data);
+        
+}
+
 exports.getSPGID = async (req,res,next)=>{
 
     let objRes = {
