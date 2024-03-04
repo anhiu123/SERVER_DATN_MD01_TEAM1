@@ -135,18 +135,18 @@ exports.putMK = async(req,res,next)=>{
 
         try {
 
-            let id_tk = req.params.id;
-            let dieuKien = {_id:id_tk};
+            let sdt = req.params.id;
+            let dieuKien =   await md.tkModal.findOne({numberPhone :sdt });
             let validate = true;
             if(validate){
                 let objTK = {};
                 objTK.passwd = req.body.passwd;
-                await md.tkModal.findByIdAndUpdate(id_tk,objTK);
+                await md.tkModal.findOneAndUpdate(dieuKien, objTK);
                 objRes.msg = "Cập nhật thành công";
                 objRes.status = 1;
 
             }
-            objRes.data = await md.tkModal.findById(dieuKien);
+            objRes.data = await md.tkModal.findOne({numberPhone :sdt });
         } catch (error) {
             objRes.msg = error.message;
         }
