@@ -1,4 +1,5 @@
 var md = require('../../modal/sanphamingio.modal');
+
 const { param } = require('../../routes');
 
 exports.getSPG = async (req,res,next)=>{
@@ -71,8 +72,9 @@ exports.addSPG = async (req,res,next)=>{
         let clcode = req.params.id_cl;
         let size = req.params.id_s;
         try {
+            let sanphamCart = await md.SPGModal.findOne({ProductId:id_sp , ColorCode:clcode,Size:size});
 
-            if (req.body.ProductId == id_sp && clcode == req.body.ColorCode && size == req.body.Size) {
+            if (sanphamCart != null) {
                 objRes.msg = "Thêm Thất Bại";
                 objRes.status = 0;
             } else {
