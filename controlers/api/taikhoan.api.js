@@ -43,21 +43,33 @@ exports.addUs = async(req,res,next)=>{
         status: 0,
         data: {}
         };
-       
+        let sdt = req.params.sdt;
+        let email1 = req.params.email;
         try {
             
-            let objTK = new  md.tkModal();
-            objTK.username = req.body.username;
-            objTK.passwd = req.body.passwd;
-            objTK.email = req.body.email; 
-            objTK.address = req.body.address;
-            objTK.image = req.body.image;
-            objTK.numberPhone = req.body.numberPhone;
-           
-            objRes.data = await objTK.save();
+            let tkc = await md.tkModal.findOne({email : email1});
+            let tkc1 = await md.tkModal.findOne({numberPhone : sdt});
 
-            objRes.msg = "Thêm thành công";
-            objRes.status = 1;
+            if (tkc != null || tkc1 != null) {
+                objRes.msg = "Thêm Thất Bại , Đã Trùng Email or SDT";
+                objRes.status = 0;
+                
+            } else {
+                let objTK = new  md.tkModal();
+                objTK.username = req.body.username;
+                objTK.passwd = req.body.passwd;
+                objTK.email = req.body.email; 
+                objTK.address = req.body.address;
+                objTK.image = req.body.image;
+                objTK.numberPhone = req.body.numberPhone;
+               
+                objRes.data = await objTK.save();
+    
+                objRes.msg = "Thêm thành công";
+                objRes.status = 1;
+            }
+
+           
         } catch (error) {
             objRes.msg = error.message;
         }
@@ -97,14 +109,6 @@ exports.putUS = async(req,res,next)=>{
             let dieuKien = {_id:id_tk};
             let validate = true;
 
-            // if(req.body.username.length<5){
-            //     objRes.msg = "Username phải nhập ít nhất 5 ký tự";
-            //     validate = false;
-            // }
-            // if(req.body.passwd.length ==0 || req.body.email.length ==0 || req.body.role.length ==0){
-            //     objRes.msg = "Không ĐƯợc Để Trống";
-            //     validate = false;
-            // }   
 
             if(validate){
                 let objTK = {};

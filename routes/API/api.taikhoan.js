@@ -8,7 +8,7 @@ router.get('/', apiTK.getUsers);
 router.get('/admin', apiTK.getADmin);
 router.get('/:sdt', apiTK.layTK);
 
-router.post('/', apiTK.addUs);
+router.post('/:sdt/:email', apiTK.addUs);
 
 // router.delete('/:id', apiTK.dltUS);
 
