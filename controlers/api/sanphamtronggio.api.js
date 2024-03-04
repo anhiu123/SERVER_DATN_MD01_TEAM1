@@ -67,22 +67,32 @@ exports.addSPG = async (req,res,next)=>{
         data: {}
         };
       
+        let id_sp = req.params.id;
+        let clcode = req.params.id_cl;
+        let size = req.params.id_s;
         try {
+
+            if (req.body.ProductId == id_sp && clcode == req.body.ColorCode && size == req.body.Size) {
+                objRes.msg = "Thêm Thất Bại";
+                objRes.status = 0;
+            } else {
+                let objDH = new  md.SPGModal();
+                objDH.CartId = req.body.CartId;
+                objDH.ProductId = req.body.ProductId;
+                objDH.ColorCode = req.body.ColorCode;
+                objDH.Name = req.body.Name;
+                objDH.Price = req.body.Price;
+                objDH.Size = req.body.Size;
+                objDH.Quantity = req.body.Quantity;
+                objDH.PropertiesId =req.body.PropertiesId;
+                objDH.Image =req.body.Image;
+        
+                objRes.data = await objDH.save();
+                objRes.msg = "Thêm thành công";
+                objRes.status = 1;
+            }
             
-            let objDH = new  md.SPGModal();
-            objDH.CartId = req.body.CartId;
-            objDH.ProductId = req.body.ProductId;
-            objDH.ColorCode = req.body.ColorCode;
-            objDH.Name = req.body.Name;
-            objDH.Price = req.body.Price;
-            objDH.Size = req.body.Size;
-            objDH.Quantity = req.body.Quantity;
-            objDH.PropertiesId =req.body.PropertiesId;
-            objDH.Image =req.body.Image;
-    
-            objRes.data = await objDH.save();
-            objRes.msg = "Thêm thành công";
-            objRes.status = 1;
+           
         } catch (error) {
             objRes.msg = error.message;
         }
