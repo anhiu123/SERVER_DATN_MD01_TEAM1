@@ -42,12 +42,12 @@ exports.tkDoanhThu = async(req, res, next) => {
             let tongTien = 0;
             for (const donHang of donHangDaGiao) {
                 try {
-                    const listSPD = await mdSPD.SPHModal.find({ DonHangId: donHang._id });
+                    const listSPD = await mdSPD.SPHModal.find({ OrderId: donHang._id });
                     for (const spd of listSPD) {
                        
-                        const sanPham = await md.spModal.findById(spd.SanPhamId);
+                        const sanPham = await md.spModal.findById(spd.ProductId);
                         console.log(sanPham); // Kiểm tra sản phẩm đã lấy được
-                        tongTien += sanPham.price * spd.SoLuong || 0; // Giả sử có trường tổng tiền trong hóa đơn
+                        tongTien += sanPham.price * spd.Quantity || 0; // Giả sử có trường tổng tiền trong hóa đơn
                     }
                 } catch (error) {
                     console.error('Lỗi khi truy vấn sản phẩm trong đơn hàng:', error);
@@ -99,7 +99,7 @@ exports.dhdone = async (req, res, next) => {
     let listDH1= null;
 
     try {
-        listspd = await mdSPD.SPHModal.find({DonHangId : id_dh});
+        listspd = await mdSPD.SPHModal.find({OrderId : id_dh});
         listmauSP = await mdMauSanPham.mauSPModal.find();
         listDH = await md1.DonHangModal.find({_id  : id_dh });
         listsp = await md.spModal.find();
