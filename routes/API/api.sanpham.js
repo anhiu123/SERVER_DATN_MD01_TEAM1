@@ -32,7 +32,7 @@ router.delete('/:id', apiSPG.dltSPG);
 
 router.get('/SPL/:id', apiSPL.getSPL);
 
-router.post('/SPL', apiSPL.addSPL);
+router.post('/SPL/:id_u/:id_pr', apiSPL.addSPL);
 // router.post('/', apiSP.addSP);
 
 // router.delete('/:id', apiSP.dltSP);

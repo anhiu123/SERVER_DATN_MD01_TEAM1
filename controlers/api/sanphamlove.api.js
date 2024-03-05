@@ -37,16 +37,26 @@ exports.addSPL = async (req,res,next)=>{
         status: 0,
         data: {}
         };
-      
+        let usid = req.params.id_u;
+        let prid = req.params.id_pr;
         try {
-            
-            let objDH = new  md.SploveModal();
-            objDH.UserId = req.body.UserId;
-            objDH.ProductId = req.body.ProductId;
 
-            objRes.data = await objDH.save();
-            objRes.msg = "Thêm thành công";
-            objRes.status = 1;
+            let checkpr = await md.SploveModal.findOne({UserId : usid ,ProductId : prid });
+
+            if(checkpr != null) {
+                objRes.msg = "Thêm Thất Bại";
+                objRes.status = 0;
+            }else{
+                let objDH = new  md.SploveModal();
+                objDH.UserId = req.body.UserId;
+                objDH.ProductId = req.body.ProductId;
+    
+                objRes.data = await objDH.save();
+                objRes.msg = "Thêm thành công";
+                objRes.status = 1;
+            }
+            
+          
         } catch (error) {
             objRes.msg = error.message;
         }

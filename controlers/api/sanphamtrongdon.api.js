@@ -19,31 +19,41 @@ exports.getSPH = async (req,res,next)=>{
         
 }
 
-exports.addSPH = async (req,res,next)=>{
-
+exports.addSPH = async (req, res, next) => {
     let objRes = {
         msg: '',
         status: 0,
         data: {}
-        };
-      
-        try {
-            
-            let objDH = new  md.SPHModal();
-            objDH.OrderId = req.body.OrderId;
-            objDH.ProductId = req.body.ProductId;
-            objDH.ColorCode = req.body.ColorCode;
-            objDH.Size = req.body.Size;
-            objDH.Quantity = req.body.Quantity;
-            objDH.PropertiesId =req.body.PropertiesId;
-            objDH.Image =req.body.Image;
-    
-            objRes.data = await objDH.save();
+    };
+
+    try {
+        let danhSachSanPham = req.body.danhSachSanPham; // Nhận mảng dữ liệu sản phẩm từ request
+
+        if (danhSachSanPham && danhSachSanPham.length > 0) {
+            // Lặp qua từng sản phẩm trong mảng và thêm vào bảng sản phẩm
+            for (let i = 0; i < danhSachSanPham.length; i++) {
+                let sanPham = danhSachSanPham[i];
+                
+                let objDH = new md.SPHModal();
+                objDH.OrderId = sanPham.OrderId;
+                objDH.ProductId = sanPham.ProductId;
+                objDH.ColorCode = sanPham.ColorCode;
+                objDH.Size = sanPham.Size;
+                objDH.Quantity = sanPham.Quantity;
+                objDH.PropertiesId = sanPham.PropertiesId;
+                objDH.Image = sanPham.Image;
+
+                await objDH.save();
+            }
+
             objRes.msg = "Thêm thành công";
             objRes.status = 1;
-        } catch (error) {
-            objRes.msg = error.message;
+        } else {
+            objRes.msg = "Danh sách sản phẩm trống";
         }
-        return res.json(objRes);
-        
+    } catch (error) {
+        objRes.msg = error.message;
+    }
+
+    return res.json(objRes);
 }
