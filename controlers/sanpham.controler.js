@@ -152,6 +152,8 @@ exports.DHDetail = async (req,res,next) =>{
                 });
             });   
             objtb.date = fullDateTimeString;
+            objtb.content = "Trạng Thái Đơn Hàng";
+            objtb.image = listspd[0].Image;
             await objtb.save();
 
 
