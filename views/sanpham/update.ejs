@@ -63,8 +63,14 @@
                         <input type="text" class="form-control , mb-3" name="name" value="<%= obj.name %>">
                     
                      
-                        <label for="exampleInputPassword1" class="form-label">Loại</label>
-                        <input type="text" class="form-control , mb-3"  name="loai" value="<%= obj.loai %>">                              
+                        <label for="exampleInputPassword1" class="form-label">Loại :</label>
+                        <!-- <input type="text" class="form-control , mb-3"  name="loai">    -->
+                        <select id="item" name="loai">
+                          <% list.forEach((item) => { %>
+                            <option value="<%= item.name %>"><%= item.name %></option>
+                          <% }); %>
+                        </select>    
+                       <br>                               
                    
                         <label for="exampleInputPassword1" class="form-label">Mô Tả</label>
                         <input type="text" class="form-control , mb-3" name="describe" value="<%= obj.describe %>" >

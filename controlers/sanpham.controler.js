@@ -386,7 +386,8 @@ exports.spUpdate = async (req,res,next) =>{
     let objSp =  {_id:'',name:'',image:'',describe:'',category:'',price:0};
     let msg = '' ;
     let dieukien = {_id:id_sp};
-   
+    let listl = null;
+    listl  = await md1.tlModal.find();
     try {
         // xử lí sư kiện post 
         if(req.method=='POST'){
@@ -442,7 +443,7 @@ exports.spUpdate = async (req,res,next) =>{
     } catch (error) {
         msg = error.message;
     }
-    res.render('sanpham/update',{msg:msg,obj:objSp});
+    res.render('sanpham/update',{msg:msg,obj:objSp,list:listl});
 
 }
 
