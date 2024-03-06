@@ -222,6 +222,26 @@ exports.DHDetail = async (req,res,next) =>{
                 await objsp.save();
                 msg = " Thêm Sản Phẩm  thành CÔng";
                 console.log( req.session.addSP = objsp );
+
+
+                try {
+                    const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
+                    let objtb = new mdTB.ThongBaoModal();
+                    objtb.date = fullDateTimeString;
+                    objtb.UserId = "1";
+                    objtb.status = "Bạn Ơi, chúng tôi vừa cập nhật một sản phẩm mới : " + req.body.name +  ", chắc chắc sẽ không làm bạn thất vọng. Hãy vào xem thông tin chi tiết để không bỏ lỡ cơ hội.";
+                    objtb.content = "Sản Phẩm Mới";
+                    objtb.image =  "http://localhost:3000/uploads/" + req.file.originalname;
+                    await objtb.save();
+        
+        
+        
+                   
+                   // res.render('sanpham/donhangdetail',{objU:objU ,listspd:listspd,listsp:listsp,listmauSP:listmauSP ,mauList:mauList,listDH:listDH , objDH_2:objDH_2});
+        
+                } catch (error) {          
+                }     
+
             }catch(err){
                 msg = " Lỗi : Bạn Chưa Chọn Ảnh" ;
             }

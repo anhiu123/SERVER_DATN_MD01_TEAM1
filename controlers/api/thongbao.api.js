@@ -10,6 +10,11 @@ exports.getTB = async (req,res,next)=>{
         };  
         try{
             let id_u = req.params.id;
+            let tbSP = null;
+            tbSP = await md.ThongBaoModal.find({UserId : "1"});
+            for (let i = 0; i < tbSP.length; i++) {
+                    objRes.data.push(tbSP[i]);
+            }    
         objRes.data = await md.ThongBaoModal.find({UserId:id_u});
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
