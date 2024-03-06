@@ -11,7 +11,27 @@ exports.getDH = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.DonHangModal.find();
+            let id_u = req.params.id;
+        objRes.data = await md.DonHangModal.find({UserId:id_u});
+        objRes.msg = "Lấy dữ liệu thành công";
+        }catch(err){
+        console.log(err);
+        objRes.msg = err.message;
+        }
+        res.json(objRes.data);
+        
+}
+
+exports.getDHDG = async (req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: []
+        };  
+        try{
+            let id_u = req.params.id;
+        objRes.data = await md.DonHangModal.find({UserId:id_u , status : "Đã giao"});
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);

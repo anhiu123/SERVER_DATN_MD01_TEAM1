@@ -30,35 +30,36 @@ exports.getSPL = async (req,res,next)=>{
         
 }
 
-exports.addSPL = async (req,res,next)=>{
 
+exports.addSPL = async (req, res, next) => {
     let objRes = {
         msg: '',
         status: 0,
         data: {}
-        };
-        let usid = req.params.id_u;
-        let prid = req.params.id_pr;
-        try {
+    };
 
-            let checkpr = await md.SploveModal.findOne({UserId : usid ,ProductId : prid });
+    let usid = req.params.id_u;
+    let prid = req.params.id_pr;
 
-            if(checkpr != null) {
-                objRes.msg = "Thêm Thất Bại";
-                objRes.status = 0;
-            }else{
-                let objDH = new  md.SploveModal();
-                objDH.UserId = req.body.UserId;
-                objDH.ProductId = req.body.ProductId;
-    
-                objRes.data = await objDH.save();
-                objRes.msg = "Thêm thành công";
-                objRes.status = 1;
-            }
-            
-          
-        } catch (error) {
-            objRes.msg = error.message;
+    try {
+        let checkpr = await md.SploveModal.findOne({ UserId: usid, ProductId: prid });
+
+        if (checkpr != null) {
+            objRes.msg = "Sản phẩm đã tồn tại trong love";
+            objRes.status = 0;
+        } else {
+            let objDH = new md.SploveModal();
+            objDH.UserId = usid;
+            objDH.ProductId = prid;
+
+            objRes.data = await objDH.save();
+            objRes.msg = "Thêm thành công";
+            objRes.status = 1;
         }
-        return res.json(objRes);
+    } catch (error) {
+        objRes.msg = error.message;
+    }
+
+    return res.json(objRes);
 }
+

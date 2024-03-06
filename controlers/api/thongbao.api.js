@@ -9,7 +9,8 @@ exports.getTB = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.ThongBaoModal.find();
+            let id_u = req.params.id;
+        objRes.data = await md.ThongBaoModal.find({UserId:id_u});
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
