@@ -133,7 +133,7 @@
                     const filteredMessages = listTN.filter(message => {
                         return message.AdminId === '<%= objU._id %>'; 
                     });
-                    filteredMessages.forEach(message => {
+                    listTN.forEach(message => {
                         const messageDiv = document.createElement('div');
                         messageDiv.classList.add('message', message.sender === 'admin' ? 'me' : 'other');
                        
@@ -155,16 +155,17 @@
                             messageDiv.innerHTML = `
                                 <div class="message-content">
                                     <div class="media">
-                                        <div class="d-flex align-items-center">
+                                        
+                                        <div class="d-flex align-items-center" style="margin-top:50px">
                                         <% us.forEach((item)=>{ %>                                             
                                                 <img src="<%= item.image %>" class="mr-3 rounded-circle" alt="Avatar" style="width: 40px;">
                                                                                  
                                         <% })  %>                                  
-                                        <div class="media-body">
+                                       
                                             <% us.forEach((item)=>{ %>  
                                                  <h5 style="margin-left:10px" class="mt-0"><%= item.username %></h5>                 
                                         <% })  %>  
-                                        </div>
+                                        
                                     </div>                                 
                                                                                                                                                                                                                                              
                                             <div class="message-time">${message.date}</div>

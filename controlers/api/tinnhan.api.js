@@ -9,7 +9,8 @@ exports.getTN = async (req,res,next)=>{
         data: []
         };  
         try{
-        objRes.data = await md.TinNhanModal.find();
+            let id_u = req.params.id;
+        objRes.data = await md.TinNhanModal.find({UserId :id_u });
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);
@@ -34,7 +35,7 @@ exports.addTN = async (req,res,next)=>{
             objTN.content = req.body.content;
             objTN.date = req.body.date;
             objTN.sender = req.body.sender;
-            objTN.AdminId = req.body.AdminId;
+            // objTN.AdminId = req.body.AdminId;
           
     
             objRes.data = await objTN.save();
