@@ -7,7 +7,7 @@ var TinNhanSchema = new db.mongoose.Schema(
             content : { type : String,require:true},
             date : { type : String,require:true},
             UserId : { type : String,require:true},
-            AdminId : { type : String,require:true},
+            // AdminId : { type : String,require:true},
         },
         {
             collection: 'TinNhan'

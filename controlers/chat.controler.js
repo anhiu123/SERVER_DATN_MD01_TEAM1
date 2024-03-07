@@ -1,7 +1,9 @@
 var md = require('../modal/sanpham.modal');
 var mdTN = require('../modal/tinnhan.modal');
 var md1 = require('../modal/taikhoan.modal');
+var mdTB = require('../modal/thongbao.modal');
 const moment = require('moment');
+
 exports.chat = async (req,res,next) =>{
     // render ra view 
     let listSP = null;
@@ -45,8 +47,9 @@ exports.chatdetail = async (req,res,next) =>{
             objtn.date  = fullDateTimeString;
             objtn.sender = "admin";
             objtn.UserId = id_us;
-            objtn.AdminId = objU._id;
+            // objtn.AdminId = objU._id;
             await objtn.save();
+
             res.redirect(req.originalUrl);
         } catch (error) {
             console.log(" Lõi  : " + error);
