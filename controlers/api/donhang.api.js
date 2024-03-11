@@ -22,6 +22,25 @@ exports.getDH = async (req,res,next)=>{
         
 }
 
+exports.getDHORDER = async (req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: []
+        };  
+        try{
+            let id = req.params.id;
+        objRes.data = await md.DonHangModal.find({OrderId:id});
+        objRes.msg = "Lấy dữ liệu thành công";
+        }catch(err){
+        console.log(err);
+        objRes.msg = err.message;
+        }
+        res.json(objRes.data);
+        
+}
+
 exports.getDHDG = async (req,res,next)=>{
 
     let objRes = {
@@ -77,7 +96,7 @@ exports.getSPDH = async (req,res,next)=>{
         };  
         let id_dh = req.params.id;
         try{
-        objRes.data = await md1.SPHModal.findOne({DonHangId:id_dh});
+        objRes.data = await md1.SPHModal.findOne({OrderId:id_dh});
         objRes.msg = "Lấy dữ liệu thành công";
         }catch(err){
         console.log(err);

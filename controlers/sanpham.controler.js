@@ -8,6 +8,8 @@ var mdTK = require('../modal/taikhoan.modal');
 var mdSPD = require('../modal/sanphamindon.modal');
 var mdTB = require('../modal/thongbao.modal');
 var fs = require('fs'); 
+const { db } = require("./firebase.config");
+const { set, ref } = require("firebase/database");
 const moment = require('moment');
 exports.spList = async (req, res, next) => {
     // render ra view 
@@ -94,6 +96,24 @@ exports.DHDetail = async (req,res,next) =>{
         msg = error.message;
     }
 
+    async function addToFirebaseAndRenderPage(data) {
+        try {
+            db.ref("tinnhan").push(data, (error) => {
+                if (error) {
+                    console.error("Lỗi khi đặt dữ liệu:", error);
+                } else {
+                    console.log("Dữ liệu đã được đặt thành công!");
+                    renderPage(req, res);
+    
+                }
+            });
+        } catch (error) {
+            console.error(error);
+           
+    
+        }
+    } 
+
     if (req.method == "POST") {
       //  console.log(listmauSP + " thuộc tính sp  ");
         if (req.body.status == "Đã giao") {
@@ -138,23 +158,29 @@ exports.DHDetail = async (req,res,next) =>{
             let objDH_2  = {};
             objDH_2.status = req.body.status;
             await mdDH.DonHangModal.findByIdAndUpdate(id_dh,objDH_2);
-            let objtb = new mdTB.ThongBaoModal();
+            // let objtb = new mdTB.ThongBaoModal();
+          
             listTK.forEach((tk) => {
                 // Thực hiện các hành động với mỗi phần tử trong mảng
                 listDH.forEach((dh) => {
                     // Thực hiện các hành động với mỗi phần tử trong mảng
                     if (tk._id.toString() === dh.UserId.toString()) {
-                        objtb.UserId =  tk._id;
-                        objtb.status =  "Đơn Hàng "  + dh._id + " Của Bạn Đã Được : " + req.body.status;
+                        // objtb.UserId =  tk._id;
+                        const data = {
+                            date: fullDateTimeString,
+                            status : "Đơn Hàng "  + dh._id + " Của Bạn Đã Được : " + req.body.status,
+                            UserId:  tk._id,
+                        };
+                        // objtb.status =  "Đơn Hàng "  + dh._id + " Của Bạn Đã Được : " + req.body.status;
                     } else {
                         // Thực hiện hành động khi không có điều kiện nào được thỏa mãn
                     }
                 });
             });   
-            objtb.date = fullDateTimeString;
-            objtb.content = "Trạng Thái Đơn Hàng";
-            objtb.image = listspd[0].Image;
-            await objtb.save();
+            // objtb.date = fullDateTimeString;
+            // objtb.content = "Trạng Thái Đơn Hàng";
+            // objtb.image = listspd[0].Image;
+            // await objtb.save();
 
 
 
