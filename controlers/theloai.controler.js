@@ -91,7 +91,7 @@ exports.tlDel = async (req,res,next) =>{
         try {
             
             await md1.tlModal.findByIdAndDelete(id_tl);
-            res.send("Đã Xóa THành CÔng ${objSp.name} . <a href='/sanpham/listloai'>DS</a>");
+            res.send("Đã Xóa THành CÔng ${objSp.name} . <a href='/theloai/listloai'>DS</a>");
 
         } catch (error) {
             res.send(err.message);

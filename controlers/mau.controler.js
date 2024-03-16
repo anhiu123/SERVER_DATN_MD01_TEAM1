@@ -62,6 +62,32 @@ exports.mAdd = async (req,res,next) =>{
 }
 
 
+exports.mDel = async (req,res,next) =>{
+
+    let id_m = req.params.id_m;
+    let objtl =  {_id:'',name:''};
+    let dieukien = {_id:id_m};
+
+    objtl = await md1.mauModal.findById(dieukien);
+    
+
+    if(req.method=='POST'){
+        // Xóa 
+        try {
+            
+            await md1.mauModal.findByIdAndDelete(id_m);
+            res.send("Đã Xóa THành CÔng ${objSp.name} . <a href='/mau'>DS</a>");
+
+        } catch (error) {
+            res.send(error.message);
+        }
+    }
+
+    res.render('mau/delete',{obj:objtl});
+
+
+}
+
 exports.mUp = async (req,res,next) =>{
 
     let id_m = req.params.id_m;
