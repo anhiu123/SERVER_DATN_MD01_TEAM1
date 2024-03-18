@@ -19,6 +19,25 @@ exports.getSPH = async (req,res,next)=>{
         
 }
 
+exports.getDHORDER = async (req,res,next)=>{
+
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: []
+        };  
+        try{
+            let id_dh = req.params.id;
+        objRes.data = await md.SPHModal.find({OrderId:id_dh});
+        objRes.msg = "Lấy dữ liệu thành công";
+        }catch(err){
+        console.log(err);
+        objRes.msg = err.message;
+        }
+        res.json(objRes.data);
+        
+}
+
 exports.addSPH = async (req, res, next) => {
     let objRes = {
         msg: '',

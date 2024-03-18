@@ -29,6 +29,7 @@ router.post('/SPD', apiSPD.addSPH);
 
 router.delete('/:id', apiSPG.dltSPG);
 
+router.get('/getOD/:id', apiSPD.getDHORDER);
 
 router.get('/SPL/:id', apiSPL.getSPL);
 

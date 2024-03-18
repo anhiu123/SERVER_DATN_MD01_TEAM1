@@ -75,6 +75,7 @@ exports.addDH = async (req,res,next)=>{
                     objDH.status = req.body.status;
                     objDH.date = req.body.date;
                     objDH.PTTT = req.body.PTTT;
+                    objDH.address = req.body.address;
             
                     objRes.data = await objDH.save();
                     objRes.msg = "Thêm thành công";

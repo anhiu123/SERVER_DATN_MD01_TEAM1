@@ -53,7 +53,7 @@ exports.dlDCGH = async (req,res,next)=>{
         data: {}
         };
         
-    let id = req.params.id;
+    let id = req.body.id;
 
     try {
      await md.DCGHModal.findByIdAndDelete(id);
