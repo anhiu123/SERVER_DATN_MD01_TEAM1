@@ -105,14 +105,14 @@ exports.tkDel = async(req,res,next) =>{
     let obju =  {_id:'',name:''};
     let dieukien = {_id:id_u};
 
-    obju = await md.tkModal.findById(dieukien);
+    obju = await md1.adminModal.findById(dieukien);
 
     if(req.method=='POST'){
         // Xóa 
         try {
             
-            await md.tkModal.findByIdAndDelete(id_u);
-            res.send("Đã Xóa THành CÔng  . <a href='/taikhoan'>DS</a>");
+            await md1.adminModal.findByIdAndDelete(id_u);
+            res.send("Đã Xóa THành CÔng  . <a href='/taikhoan/admin'>DS</a>");
 
         } catch (error) {
             res.send(err.message);
@@ -158,13 +158,13 @@ exports.tkUp = async(req,res,next) =>{
             objU.passwd = pass;
             objU.role = role;
 
-            await md.tkModal.findByIdAndUpdate(id_tk,objU);
+            await md1.adminModal.findByIdAndUpdate(id_tk,objU);
             msg = ' cập nhật thành công !';
 
         }
 
         }
-        objtk = await md.tkModal.findById(dieukien);
+        objtk = await md1.adminModal.findById(dieukien);
 
     } catch (error) {
         msg = error.message;
