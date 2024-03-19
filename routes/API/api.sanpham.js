@@ -33,6 +33,8 @@ router.get('/getOD/:id', apiSPD.getDHORDER);
 
 router.get('/SPL/:id', apiSPL.getSPL);
 
+router.delete('/SPL/:id_u/:id_pr', apiSPL.deleteSPL);
+
 router.post('/SPL/:id_u/:id_pr', apiSPL.addSPL);
 // router.post('/', apiSP.addSP);
 

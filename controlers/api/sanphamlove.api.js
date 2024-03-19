@@ -31,6 +31,33 @@ exports.getSPL = async (req,res,next)=>{
 }
 
 
+exports.deleteSPL = async (req, res, next) => {
+    let objRes = {
+        msg: '',
+        status: 0
+    };
+
+    let usid = req.params.id_u;
+    let prid = req.params.id_pr;
+
+    try {
+        let deleted = await md.SploveModal.deleteOne({ UserId: usid, ProductId: prid });
+
+        if (deleted.deletedCount === 0) {
+            objRes.msg = "Sản phẩm không tồn tại trong danh sách yêu thích";
+            objRes.status = 0;
+        } else {
+            objRes.msg = "Xóa thành công";
+            objRes.status = 1;
+        }
+    } catch (error) {
+        objRes.msg = error.message;
+    }
+
+    return res.json(objRes);
+}
+
+
 exports.addSPL = async (req, res, next) => {
     let objRes = {
         msg: '',
