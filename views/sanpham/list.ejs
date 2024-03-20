@@ -39,9 +39,16 @@
   display: none;
 }
 
+.short-description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-
-  
+.show-more-btn {
+  padding: 0;
+  margin-left: 5px;
+}
     </style>
 </head>
 <body>
@@ -123,148 +130,182 @@
                                     <ul class="dropdown-menu">
                                       <li><a class="dropdown-item" href="/thongke">Doanh Thu</a></li>
                                       <li><a class="dropdown-item" href="/thongke/top">Top Sản Phẩm</a></li>
-                                      <li><hr class="dropdown-divider"></li>
-                                      <li><a class="dropdown-item" href="#">Đơn Hàng</a></li>
-                                    </ul>
-                                  </li>
-                                  <% } %>
-                                  <li class="nav-item dropdown">
-                                    <a class="navbar-brand " href="/chat">
-                                     Chat (<span class="text-danger" id="messageCount">0</span>)   
-                                    </a>
-                                  </li>
-                                  <% if (objU.role==='Admin'){ %>
-                                    <li class="nav-item dropdown">
-                                      <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Tài Khoản 
-                                      </a>
-                                      <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="/taikhoan">Tài Khoản Người Dùng </a></li>
-                                        <li><a class="dropdown-item" href="/taikhoan/admin">Tài Khoản Admin  </a></li>
-                                        <li><a class="dropdown-item" href="/taikhoan/add">Thêm Admin</a></li>
+                                      <li><hr class="
+                                        dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Đơn Hàng</a></li>
                                       </ul>
                                     </li>
                                     <% } %>
-                             
-                      </nav>
+                                    <li class="nav-item dropdown">
+                                      <a class="navbar-brand " href="/chat">
+                                       Chat (<span class="text-danger" id="messageCount">0</span>)   
+                                      </a>
+                                    </li>
+                                    <% if (objU.role==='Admin'){ %>
+                                      <li class="nav-item dropdown">
+                                        <a class="navbar-brand dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                          Tài Khoản 
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                          <li><a class="dropdown-item" href="/taikhoan">Tài Khoản Người Dùng </a></li>
+                                          <li><a class="dropdown-item" href="/taikhoan/admin">Tài Khoản Admin  </a></li>
+                                          <li><a class="dropdown-item" href="/taikhoan/add">Thêm Admin</a></li>
+                                        </ul>
+                                      </li>
+                                      <% } %>
+                               
+                        </nav>
+                  </div>
+              </div>
+              
+              <div class="ms-4 ms-4"><h1> Sản Phẩm </h1>
+                <a href="/sanpham/home">Home/</a>
+              </div>
+              <!-- khối 3 -->
+              <div class=" col-12 col-sm-3 col-md-2"></div>
+              <!-- khối 4 -->
+              <div class=" col-12 col-sm-9 col-md-8">
+                <div class="mt-5">
+          
+                  <table class=" table table-bordered  mx-auto" border="1" >
+  
+                    <tr>
+                        <th>ID</th>  
+                         <th>Tên Sản Phẩm</th> 
+                            <th>Ảnh</th>
+                            <th>Mô Tả</th>
+                            <th>Giá</th>
+                            <th>Loại </th>
+                            <th>Màu Sắc </th>
+                            <th>Size Sản Phẩm  aaaaaaaaaaaaaaaaaaaaâaaa</th>
+                            <th>Thêm Màu   </th>
+                            <th>Sửa </th>
+                            <!-- <th>Thêm Size   </th> -->
+                            <th>Số Lượng Bán    </th>
+                            <th>  Thời Gian Tạo    </th>
+                         
+                    </tr>
+  
+                    <h2>Tổng Số Sản Phẩm : <%= sl %> </h2>
+                    <form action="" method="GET">
+                      <label for="exampleInputPassword1" class="form-label"> Tìm Kiếm Theo Loại :</label>
+                    
+                      <select id="item" name="loai">
+                        <% listloai.forEach((item) => { %>
+                          <option value="<%= item.name %>"><%= item.name %></option>
+                        <% }); %>
+                      </select>   
+                      <button  type="submit" class="btn btn-primary ms-3 mb-2">Tìm Kiếm</button> 
+                     </form>
+                     <br>    
+                    <% listsp.forEach((item)=>{ %>
+                        <tr>
+                            <td class="text-center"><%= item._id %></td> 
+                              <td class="text-center"><%= item.name %></td>  
+                                <td class="text-center">
+                                  <!-- <img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""> -->
+                                  <% listmauSP.forEach((mau) => { %>
+                                    <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
+                                      <img src="<%= mau.image %>" style="width: 130px;height: 70px; margin-top: 20px;" alt="">                                                                                                           
+                                    <% } %>
+                                <% }); %>
+                                </td>
+                                <td class="text-center">
+                                  <% if (item.describe.length > 10) { %>
+                                      <div class="short-description">
+                                          <%= item.describe.substring(0, 10) %>... <!-- Hiển thị chỉ một phần của mô tả -->
+                                          <button class="btn btn-link show-more-btn">Xem Thêm</button> <!-- Button "Xem Thêm" -->
+                                          <button class="btn btn-link show-less-btn" style="display: none;">Ẩn Bớt</button> <!-- Button "Ẩn Bớt", mặc định ẩn -->
+
+                                      </div>
+                                      <div class="full-description" style="display: none;">
+                                          <%= item.describe %> <!-- Nội dung đầy đủ sẽ được ẩn đi ban đầu -->
+                                      </div>
+                                  <% } else { %>
+                                      <%= item.describe %> <!-- Hiển thị đầy đủ nếu mô tả không quá dài -->
+                                  <% } %>
+                              </td>
+                              
+                                <td class="text-center"><%= item.price %></td>
+                                <td class="text-center"><%= item.category %></td>
+                                <td class="text-center">
+                                  <% listmauSP.forEach((mau) => { %>
+                                    <% if (mau.productId.toString() === item._id.toString()) { %>
+                                      
+                                                <a href="/sanpham/updatemau/<%= mau._id %>/<%= item._id %>"  class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mau.colorId %>; width: 50px; height: 50px;"></a>
+                                                                  
+                                    <% } %>
+                                <% }); %>
+                              </td>
+                              <td class="text-center">
+                                <div class="size-container">
+                                    <% listmauSP.forEach((mau) => { %>
+                                        <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
+                                            <% mau.sizes.forEach(size => { %>
+                                                <div class="size-item"><%= size.size %> - <%= size.quantity %></div>
+                                            <% }) %>                                                                                               
+                                        <% } %>
+                                    <% }); %>
+                                </div>
+                            </td>
+                                <td class="text-center"><a href="/sanpham/addmau/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToj0igxTpTwdlpv19tJIK9o1HDY9G-M0SLSg&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
+                                </td>
+                                <td>
+                                  <a href="/sanpham/update/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfBR4wCLos45ns7dyxbE0m2-T6RfhzuHt5Ew&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
+                                </td>  
+                                      <td><%= item.quantitySold %></td>
+                                    
+                                      <td><%= item.timeCreate %></td>
+                                
+                        </tr>
+        
+                    <% }) %>
+                  </table>
                 </div>
-            </div>
-            
-            <div class="ms-4 ms-4"><h1> Sản Phẩm </h1>
-              <a href="/sanpham/home">Home/</a>
-       
-             
-             
-            
+              </div>
             </div>
             <!-- khối 3 -->
-            <div class=" col-12 col-sm-3 col-md-2"></div>
+            <div class="col-12 col-sm-3 col-md-2"></div>
             <!-- khối 4 -->
-            <div class=" col-12 col-sm-9 col-md-8">
+            <div class="col-12 col-sm-9 col-md-8">
               <div class="mt-5">
-        
-                <table class=" table table-bordered  mx-auto" border="1" >
-
-                  <tr>
-                      <th>ID</th>  
-                       <th>Tên Sản Phẩm</th> 
-                          <th>Ảnh</th>
-                          <th>Mô Tả</th>
-                          <th>Giá</th>
-                          <th>Loại </th>
-                          <th>Màu Sắc </th>
-                          <th>Size Sản Phẩm  aaaaaaaaaaaaaaaaaaaaâaaa</th>
-                          <th>Thêm Màu   </th>
-                          <th>Sửa </th>
-                          <!-- <th>Thêm Size   </th> -->
-                          <th>Số Lượng Bán    </th>
-                          <th>  Thời Gian Tạo    </th>
-                       
-                  </tr>
-
-                  <h2>Tổng Số Sản Phẩm : <%= sl %> </h2>
-                  <form action="" method="GET">
-                    <label for="exampleInputPassword1" class="form-label"> Tìm Kiếm Theo Loại :</label>
-                  
-                    <select id="item" name="loai">
-                      <% listloai.forEach((item) => { %>
-                        <option value="<%= item.name %>"><%= item.name %></option>
-                      <% }); %>
-                    </select>   
-                    <button  type="submit" class="btn btn-primary ms-3 mb-2">Tìm Kiếm</button> 
-                   </form>
-                   <br>    
-                  <% listsp.forEach((item)=>{ %>
-                      <tr>
-                          <td class="text-center"><%= item._id %></td> 
-                            <td class="text-center"><%= item.name %></td>  
-                              <td class="text-center">
-                                <!-- <img src="<%= item.image %>" style="width: 130px;height: 70px;" alt=""> -->
-                                <% listmauSP.forEach((mau) => { %>
-                                  <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
-                                    <img src="<%= mau.image %>" style="width: 130px;height: 70px; margin-top: 20px;" alt="">                                                                                                           
-                                  <% } %>
-                              <% }); %>
-                              </td>
-                              <td class="text-center"><%= item.describe %></td>
-                              <td class="text-center"><%= item.price %></td>
-                              <td class="text-center"><%= item.category %></td>
-                              <td class="text-center">
-                                <% listmauSP.forEach((mau) => { %>
-                                  <% if (mau.productId.toString() === item._id.toString()) { %>
-                                    
-                                              <a href="/sanpham/updatemau/<%= mau._id %>/<%= item._id %>"  class="color-box" class="text-center" style=" margin-top: 25px;background-color: <%= '#' + mau.colorId %>; width: 50px; height: 50px;"></a>
-                                                                
-                                  <% } %>
-                              <% }); %>
-                            </td>
-                            <td class="text-center">
-                              <div class="size-container">
-                                  <% listmauSP.forEach((mau) => { %>
-                                      <% if (mau.productId.toString() === item._id.toString()) { %>                                                                         
-                                          <% mau.sizes.forEach(size => { %>
-                                              <div class="size-item"><%= size.size %> - <%= size.quantity %></div>
-                                          <% }) %>                                                                                               
-                                      <% } %>
-                                  <% }); %>
-                              </div>
-                          </td>
-                              <td class="text-center"><a href="/sanpham/addmau/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToj0igxTpTwdlpv19tJIK9o1HDY9G-M0SLSg&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
-                              </td>
-                              <td>
-                                <a href="/sanpham/update/<%= item._id %>"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfBR4wCLos45ns7dyxbE0m2-T6RfhzuHt5Ew&usqp=CAU" style="width: 30px;height: 30px;" alt=""></a>
-                              </td>  
-                                    <td><%= item.quantitySold %></td>
-                                  
-                                    <td><%= item.timeCreate %></td>
-                              
-                      </tr>
-      
-                  <% }) %>
-              </table>
-            </div></div>
-            <div class=" col-12           col-md-2 d-none d-md-block"></div>
-            <div class=" col-12 ">
-              <img style="margin-left: 800px;margin-top: 50;" src="https://tse3.mm.bing.net/th?id=OIP.vR3c8gJDtTZuFFJLa3nHcwAAAA&pid=Api&P=0&h=180" alt="Mô tả ảnh" width="200" height="150">
+                <img style="margin-left: 800px; margin-top: 50;" src="https://tse3.mm.bing.net/th?id=OIP.vR3c8gJDtTZuFFJLa3nHcwAAAA&pid=Api&P=0&h=180" alt="Mô tả ảnh" width="200" height="150">
+              </div>
             </div>
+          </div>
         </div>
-</div> 
-
-
-
-
     
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script> 
-    <script src="/bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
-</body>
-</html>
-
-
-<!-- <form>
-  <div class="input-group">
-    <input type="text" class="form-control" placeholder="Nhập tên sản phẩm...">
-    <div class="input-group-append">
-      <button class="btn btn-primary" type="button">Tìm kiếm</button>
-    </div>
-  </div>
-</form> -->
+        <script>
+          document.querySelectorAll('.show-more-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const parent = btn.parentElement;
+              parent.style.display = 'none'; // Ẩn nút "Xem Thêm"
+              const fullDescription = parent.nextElementSibling;
+              fullDescription.style.display = 'block'; // Hiển thị nội dung đầy đủ
+              const showLessBtn = fullDescription.querySelector('.show-less-btn');
+              if (showLessBtn) {
+                showLessBtn.style.display = 'inline'; // Hiển thị nút "Ẩn Bớt" nếu có
+              }
+            });
+          });
+        
+          document.querySelectorAll('.show-less-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const parent = btn.parentElement;
+              parent.style.display = 'none'; // Ẩn nút "Ẩn Bớt"
+              const shortDescription = parent.previousElementSibling;
+              shortDescription.style.display = 'block'; // Hiển thị nội dung rút gọn
+              shortDescription.querySelector('.show-more-btn').style.display = 'inline'; // Hiển thị nút "Xem Thêm"
+            });
+          });
+        </script>
+        
+        
+        
+        
+    
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="/bootstrap-5.3.0-dist/js/bootstrap.min.js"></script>
+    </body>
+    </html>
+      
