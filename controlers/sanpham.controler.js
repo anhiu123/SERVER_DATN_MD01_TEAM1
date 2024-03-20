@@ -9,6 +9,33 @@ var mdSPD = require('../modal/sanphamindon.modal');
 var mdTB = require('../modal/thongbao.modal');
 var fs = require('fs'); 
 const moment = require('moment');
+const { db } = require("./firebase.config");
+const { set, ref } = require("firebase/database");
+
+
+
+
+
+exports.Home = async (req,res,next) =>{
+    // render ra view 
+    let listDH = null;
+    let objU = req.session.userLogin;
+    let listTK = null;
+
+    try {
+        listDH = await mdDH.DonHangModal.find({ status: { $ne: "Đã giao" } });
+
+        listTK = await mdTK.tkModal.find();
+        io.emit('updateOrders', { listDH });
+      //  console.log(listDH);
+    } catch (error) {
+        
+    }
+
+    res.render('sanpham/home',{objU:objU,listDH:listDH,listTK:listTK});
+
+}
+
 exports.spList = async (req, res, next) => {
     // render ra view 
     const loaiChon = req.query.loai;
@@ -45,25 +72,6 @@ exports.spList = async (req, res, next) => {
     res.render('sanpham/list', { listsp: list, msg: msg, sl: sl, role: role1, listloai: listloai, objU: objU ,listmauSP:listmauSP,mauList:mauList});
 };
 
-
-exports.Home = async (req,res,next) =>{
-    // render ra view 
-    let listDH = null;
-    let objU = req.session.userLogin;
-    let listTK = null;
-
-    try {
-        listDH = await mdDH.DonHangModal.find({ status: { $ne: "Đã giao" } });
-
-        listTK = await mdTK.tkModal.find();
-      //  console.log(listDH);
-    } catch (error) {
-        
-    }
-
-    res.render('sanpham/home',{objU:objU,listDH:listDH,listTK:listTK});
-
-}
 
 exports.DHDetail = async (req,res,next) =>{
     // render ra view 
@@ -133,28 +141,53 @@ exports.DHDetail = async (req,res,next) =>{
             
         }
 
+        async function addToFirebaseAndRenderPage(data) {
+            try {
+                db.ref("thongbao").push(data, (error) => {
+                    if (error) {
+                        console.error("Lỗi khi đặt dữ liệu:", error);
+                    } else {
+                        console.log("Dữ liệu đã được đặt thành công!");
+                     
+                    }
+                });
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
         try {
             const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
             let objDH_2  = {};
             objDH_2.status = req.body.status;
             await mdDH.DonHangModal.findByIdAndUpdate(id_dh,objDH_2);
-            let objtb = new mdTB.ThongBaoModal();
+            // let objtb = new mdTB.ThongBaoModal();
             listTK.forEach((tk) => {
                 // Thực hiện các hành động với mỗi phần tử trong mảng
                 listDH.forEach((dh) => {
                     // Thực hiện các hành động với mỗi phần tử trong mảng
                     if (tk._id.toString() === dh.UserId.toString()) {
-                        objtb.UserId =  tk._id;
-                        objtb.status =  "Đơn Hàng "  + dh._id + " Của Bạn Đã Được : " + req.body.status;
+                        const data1 = {
+                            content: "Trạng Thái Đơn Hàng",
+                            date: fullDateTimeString,
+                            status:  "Đơn Hàng "  + dh._id + " Của Bạn Đã Được : " + req.body.status,
+                            UserId: tk._id,
+                            image : listspd[0].Image,
+                        };
+                        addToFirebaseAndRenderPage(data1);
+                        // objtb.UserId =  tk._id;
+                        // objtb.status =  "Đơn Hàng "  + dh._id + " Của Bạn Đã Được : " + req.body.status;
                     } else {
                         // Thực hiện hành động khi không có điều kiện nào được thỏa mãn
                     }
                 });
             });   
-            objtb.date = fullDateTimeString;
-            objtb.content = "Trạng Thái Đơn Hàng";
-            objtb.image = listspd[0].Image;
-            await objtb.save();
+            
+                
+            // objtb.date = fullDateTimeString;
+            // objtb.content = "Trạng Thái Đơn Hàng";
+            // objtb.image = listspd[0].Image;
+            // await objtb.save();
 
 
 
@@ -190,7 +223,7 @@ exports.DHDetail = async (req,res,next) =>{
             if(err){
                 console.log(err);
             }else{
-                console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+                console.log("url : http://192.168.1.8:3000/uploads/" + req.file.originalname);
             }
 
         })
@@ -226,13 +259,40 @@ exports.DHDetail = async (req,res,next) =>{
 
                 try {
                     const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
-                    let objtb = new mdTB.ThongBaoModal();
-                    objtb.date = fullDateTimeString;
-                    objtb.UserId = "1";
-                    objtb.status = "Bạn Ơi, chúng tôi vừa cập nhật một sản phẩm mới : " + req.body.name +  ", chắc chắc sẽ không làm bạn thất vọng. Hãy vào xem thông tin chi tiết để không bỏ lỡ cơ hội.";
-                    objtb.content = "Sản Phẩm Mới";
-                    objtb.image =  "http://localhost:3000/uploads/" + req.file.originalname;
-                    await objtb.save();
+
+                    async function addToFirebaseAndRenderPage(data) {
+                        try {
+                            db.ref("thongbao").push(data, (error) => {
+                                if (error) {
+                                    console.error("Lỗi khi đặt dữ liệu:", error);
+                                } else {
+                                    console.log("Dữ liệu đã được đặt thành công!");
+                                  
+                                }
+                            });
+                        } catch (error) {
+                            console.error(error);
+                        }
+                    }
+
+                    const data1 = {
+                        content: "Sản Phẩm Mới",
+                        date: fullDateTimeString,
+                        status:  "Bạn Ơi, chúng tôi vừa cập nhật một sản phẩm mới : " + req.body.name +  ", chắc chắc sẽ không làm bạn thất vọng. Hãy vào xem thông tin chi tiết để không bỏ lỡ cơ hội.",
+                        UserId: "1",
+                        image : "http://192.168.1.8:3000/uploads/" + req.file.originalname,
+                    };
+
+                    addToFirebaseAndRenderPage(data1);
+
+
+                    // let objtb = new mdTB.ThongBaoModal();
+                    // objtb.date = fullDateTimeString;
+                    // objtb.UserId = "1";
+                    // objtb.status = "Bạn Ơi, chúng tôi vừa cập nhật một sản phẩm mới : " + req.body.name +  ", chắc chắc sẽ không làm bạn thất vọng. Hãy vào xem thông tin chi tiết để không bỏ lỡ cơ hội.";
+                    // objtb.content = "Sản Phẩm Mới";
+                    // objtb.image =  "http://localhost:3000/uploads/" + req.file.originalname;
+                    // await objtb.save();
         
         
         
@@ -285,7 +345,7 @@ exports.spAddMau = async(req,res,next) =>{
                     console.log(err);
                     msg = " Chưa Chọn Ảnh"
                 }else{
-                    console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
+                    console.log("url : http://192.168.1.8:3000/uploads/" + req.file.originalname);
                 }
     
             })
@@ -305,7 +365,7 @@ exports.spAddMau = async(req,res,next) =>{
                 let objmsp = new mdMauSanPham.mauSPModal();
                 objmsp.productId = id_sp;
                 objmsp.colorId = req.body.mau;
-                objmsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
+                objmsp.image = "http://192.168.1.8:3000/uploads/" + req.file.originalname;
                 objmsp.sizes = sizes;
                 await objmsp.save();
                 msg = "Thêm Màu Sản Phẩm thành CÔng";

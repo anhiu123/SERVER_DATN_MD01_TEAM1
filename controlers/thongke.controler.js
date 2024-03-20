@@ -49,6 +49,7 @@ exports.tkDoanhThu = async(req, res, next) => {
                         console.log(sanPham); // Kiểm tra sản phẩm đã lấy được
                         tongTien += sanPham.price * spd.Quantity || 0; // Giả sử có trường tổng tiền trong hóa đơn
                     }
+                    tongTien  = tongTien + 22000 ;
                 } catch (error) {
                     console.error('Lỗi khi truy vấn sản phẩm trong đơn hàng:', error);
                 }

@@ -132,6 +132,38 @@
                 <tbody>
                   <!-- Dữ liệu đơn hàng -->
               
+                 
+
+                  <!-- <script>
+                    var socket = io();
+                
+                    socket.on('newOrders', function(data) {
+                        // Cập nhật dữ liệu vào bảng listDH
+                        updateOrders(data);
+                    });
+                
+                    // Hàm cập nhật dữ liệu vào bảng listDH
+                    function updateOrders(data) {
+                        // Xóa toàn bộ các hàng hiện tại trong bảng
+                        var tableBody = document.querySelector('tbody');
+                        tableBody.innerHTML = '';
+                
+                        // Duyệt qua dữ liệu mới và thêm các hàng vào bảng
+                        data.listDH.forEach(function(item) {
+                            var row = '<tr>' +
+                                          '<td>' + item._id + '</td>' +
+                                          '<td>' + item.userId + '</td>' +
+                                          '<td>' + item.date + '</td>' +
+                                          '<td>' + item.status + '</td>' +
+                                          '<td>' + item.address + '</td>' +
+                                          '<td>' + item.PTTT + '</td>' +
+                                          '<td><a href="/sanpham/dhdetail/' + item._id + '">Chi Tiết</a></td>' +
+                                      '</tr>';
+                            tableBody.innerHTML += row;
+                        });
+                    }
+                </script>
+                 -->
                   <% listDH.forEach((item)=>{ %>
       
                     <tr>

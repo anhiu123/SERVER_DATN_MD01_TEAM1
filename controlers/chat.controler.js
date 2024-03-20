@@ -6,9 +6,6 @@ const moment = require('moment');
 const { db } = require("./firebase.config");
 const { set, ref } = require("firebase/database");
 
-
-
-
 exports.chat = async (req,res,next) =>{
     // render ra view 
     let listSP = null;
@@ -52,9 +49,6 @@ exports.chatdetail = async (req, res, next) => {
       }
   }
   
-
- 
-
     db.ref('tinnhan').on('child_added', snapshot => {
       const data = snapshot.val();
     
@@ -65,7 +59,7 @@ exports.chatdetail = async (req, res, next) => {
           // console.log(listTN);
       }
       renderPage(req, res);
-
+ 
   });
 
   } catch (error) {

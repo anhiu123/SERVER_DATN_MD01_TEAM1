@@ -126,61 +126,86 @@
                     </div>
                 </div>
                 
+                <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-app.js"></script>
+                <script src="https://www.gstatic.com/firebasejs/8.9.1/firebase-database.js"></script>
+
                 <script>
-                  
-                    const listTN = <%- JSON.stringify(listTN) %>;
-                    const chatMessages = document.getElementById('chatMessages');
-                    const filteredMessages = listTN.filter(message => {
-                        return message.AdminId === '<%= objU._id %>'; 
-                    });
-                    listTN.forEach(message => {
-                        const messageDiv = document.createElement('div');
-                        messageDiv.classList.add('message', message.sender === 'admin' ? 'me' : 'other');
-                       
-                        if (message.sender === 'admin' ) {
-                            messageDiv.innerHTML = `
-                            <div  class="message-content">  
-                                <div class="media">         
-                                                                                                     
-                                            <div  class="media-body">                                                                                                      
-                                                <div style="margin-left:400px; margin-top:50px " class="message-time">${message.date}</div>
-                                                <p > ${message.content}</p> 
-                                                
-                                          
-                            </div>
-                        </div>
-                        </div>     
-                            `;
-                        } else {
-                            messageDiv.innerHTML = `
-                                <div class="message-content">
-                                    <div class="media">
-                                        
-                                        <div class="d-flex align-items-center" style="margin-top:50px">
-                                        <% us.forEach((item)=>{ %>                                             
-                                                <img src="<%= item.image %>" class="mr-3 rounded-circle" alt="Avatar" style="width: 40px;">
-                                                                                 
-                                        <% })  %>                                  
-                                       
-                                            <% us.forEach((item)=>{ %>  
-                                                 <h5 style="margin-left:10px" class="mt-0"><%= item.username %></h5>                 
-                                        <% })  %>  
-                                        
-                                    </div>                                 
-                                                                                                                                                                                                                                             
-                                            <div class="message-time">${message.date}</div>
-                                            <p>${message.content}</p>  
-                                   
-                                      <br>
+                    // Initialize Firebase
+                    const firebaseConfig = {
+                        apiKey: "AIzaSyDLfpPbdOKneNtDMzH1VszPLGJSr-lmQOQ",
+                authDomain: "vidu2-96b2f.firebaseapp.com",
+                databaseURL: "https://vidu2-96b2f-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "vidu2-96b2f",
+                storageBucket: "vidu2-96b2f.appspot.com",
+                messagingSenderId: "474743315722",
+                appId: "1:474743315722:web:7435376f395eef8a27eef3",
+                measurementId: "G-8LF86WD24S"
+                    };
+                    firebase.initializeApp(firebaseConfig);
+            
+                    const db = firebase.database();
+            
+                    // Reference to your messages node in Firebase
+                    const messagesRef = db.ref('tinnhan');
+            
+                    // Function to fetch messages from Firebase and display them
+                    function fetchAndDisplayMessages() {
+                        messagesRef.on('value', (snapshot) => {
+                            const chatMessages = document.getElementById('chatMessages');
+                            chatMessages.innerHTML = ''; // Clear existing messages
+                            snapshot.forEach((childSnapshot) => {
+                                const message = childSnapshot.val();
+                                const messageDiv = document.createElement('div');
+                                messageDiv.classList.add('message', message.sender === 'admin' ? 'me' : 'other');
+                                // Customize messageDiv inner HTML based on your message structure
+                                if (message.sender === 'admin' ) {
+                                    messageDiv.innerHTML = `
+                                    <div  class="message-content">  
+                                        <div class="media">         
+                                                                                                             
+                                                    <div  class="media-body">                                                                                                      
+                                                        <div style="margin-left:400px; margin-top:50px " class="message-time">${message.date}</div>
+                                                        <p > ${message.content}</p> 
+                                                        
+                                                  
                                     </div>
                                 </div>
-                            `;
-                        }     
-                        chatMessages.appendChild(messageDiv);
-                    });
-                    // Cuộn xuống tin nhắn mới nhất
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                                </div>     
+                                    `;
+                                } else {
+                                    messageDiv.innerHTML = `
+                                        <div class="message-content">
+                                            <div class="media">
+                                                
+                                                <div class="d-flex align-items-center" style="margin-top:50px">
+                                                <% us.forEach((item)=>{ %>                                             
+                                                        <img src="<%= item.image %>" class="mr-3 rounded-circle" alt="Avatar" style="width: 40px;">
+                                                                                         
+                                                <% })  %>                                  
+                                               
+                                                    <% us.forEach((item)=>{ %>  
+                                                         <h5 style="margin-left:10px" class="mt-0"><%= item.username %></h5>                 
+                                                <% })  %>  
+                                                
+                                            </div>                                 
+                                                                                                                                                                                                                                                     
+                                                    <div class="message-time">${message.date}</div>
+                                                    <p>${message.content}</p>  
+                                           
+                                              <br>
+                                            </div>
+                                        </div>
+                                    `;
+                                }     
+                                chatMessages.appendChild(messageDiv);
+                            });
+                        });
+                    }
+            
+                    // Call the function to fetch and display messages
+                    fetchAndDisplayMessages();
                 </script>
+
                                 </div>
                                
                                 <div style="margin-left: 330px;" class="input-group">

@@ -83,6 +83,30 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+
+
+// const http = require('http');
+// const socketIo = require('socket.io');
+
+
+// const server = http.createServer(app);
+// const io = socketIo(server);
+
+// io.on('connection', (socket) => {
+//     console.log('A client connected');
+
+//     // Gửi danh sách đơn hàng tới máy khách khi có sự kiện 'updateOrders'
+//     socket.on('sendMessage', (newMessage) => {
+//       // Gửi tin nhắn mới tới tất cả các máy khách đang kết nối
+//       io.emit('newMessage', newMessage);
+//   });
+// });
+
+// const PORT = process.env.PORT || 3001;
+// server.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}`);
+// });
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
