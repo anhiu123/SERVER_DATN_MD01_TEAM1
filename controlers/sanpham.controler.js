@@ -233,7 +233,7 @@ exports.DHDetail = async (req,res,next) =>{
       try {
         // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
         const existingSP = await md.spModal.findOne({ name: req.body.name});
-        const existingSP1 = await md.spModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+        const existingSP1 = await md.spModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname});
       
 
         if (existingSP || existingSP1) {
@@ -246,7 +246,7 @@ exports.DHDetail = async (req,res,next) =>{
                 const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
                 let objsp = new md.spModal();
                 objsp.name = req.body.name;
-                 objsp.image = "http://localhost:3000/uploads/" + req.file.originalname;
+                 objsp.image =  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
                 objsp.describe = req.body.describe;
                 objsp.price = req.body.price;
                 objsp.category = req.body.loai;
@@ -481,7 +481,7 @@ exports.spUpdate = async (req,res,next) =>{
                 }
             })
             let name = req.body.name;
-            let image = "http://localhost:3000/uploads/" + req.file.originalname;
+            let image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
             let describe = req.body.describe;
             let loai = req.body.loai;
             let price = req.body.price;
@@ -494,7 +494,7 @@ exports.spUpdate = async (req,res,next) =>{
             try {
                 // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
                 const existingSP = await md.spModal.findOne({ name: req.body.name});
-                const existingSP1 = await md.spModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+                const existingSP1 = await md.spModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
               
                 if (existingSP || existingSP1) {
                     // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
@@ -555,13 +555,13 @@ exports.spUpTT  =async  (req,res,next) =>{
                     console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
                 }
             })
-            let image = "http://localhost:3000/uploads/" + req.file.originalname;
+            let image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
             let validate = true;
 
             try {
                 // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
                 const existingColor = await mdMauSanPham.mauSPModal.findOne({ productId: id_sp, colorId: req.body.mau });
-                const existingSP1 = await mdMauSanPham.mauSPModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+                const existingSP1 = await mdMauSanPham.mauSPModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname});
               
                 if (  existingSP1 || existingColor) {
                     // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
@@ -571,7 +571,7 @@ exports.spUpTT  =async  (req,res,next) =>{
                     if(validate){
                         let objTT  = {};
                         objTT.colorId  = req.body.mau;
-                        objTT.image = "http://localhost:3000/uploads/" + req.file.originalname;
+                        objTT.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
                         objTT.sizes = sizes;
             
                         // tìm theo chuỗi id và update 

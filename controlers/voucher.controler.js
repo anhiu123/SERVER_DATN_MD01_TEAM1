@@ -60,7 +60,7 @@ exports.vcAdd = async (req,res,next) =>{
             const existingCate = await md1.VoucherModal.findOne({ name: req.body.name});
             const existingCate2 = await md1.VoucherModal.findOne({ content: req.body.content});
 
-            const existingCate1 = await md1.VoucherModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+            const existingCate1 = await md1.VoucherModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
         
             if (existingCate || existingCate1 || existingCate2) {
                 // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
@@ -74,7 +74,7 @@ exports.vcAdd = async (req,res,next) =>{
                 objvc.price = req.body.price;
                 objvc.toDate = req.body.name;
                 objvc.create_time = fullDateTimeString;
-                objvc.image = "http://localhost:3000/uploads/" + req.file.originalname;
+                objvc.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
                
                 await objvc.save();
                 msg = " Thêm Voucher  thành CÔng";
@@ -155,7 +155,7 @@ exports.vcUp = async (req,res,next) =>{
               try {
                 // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
                 const existingCate = await md1.VoucherModal.findOne({ name: req.body.name});
-                const existingCate1 = await md1.VoucherModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+                const existingCate1 = await md1.VoucherModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
                 const existingCate2 = await md1.VoucherModal.findOne({ content: req.body.content});
             
                 if (existingCate || existingCate1 |existingCate2) {
@@ -170,7 +170,7 @@ exports.vcUp = async (req,res,next) =>{
                         objtl_2.price = price;
                         objtl_2.fromDate = fromDate;
                         objtl_2.toDate = toDate;
-                        objtl_2.image = "http://localhost:3000/uploads/" + req.file.originalname ;
+                        objtl_2.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
         
                         // tìm theo chuỗi id và update 
                         await md1.VoucherModal.findByIdAndUpdate(id_tl,objtl_2);

@@ -42,6 +42,7 @@ exports.tlAdd = async (req,res,next) =>{
             fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
     
                 if(err){
+                    
                     console.log(err);
                 }else{
                     console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
@@ -55,7 +56,7 @@ exports.tlAdd = async (req,res,next) =>{
         try {
             // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
             const existingCate = await md1.tlModal.findOne({ name: req.body.name});
-            const existingCate1 = await md1.tlModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+            const existingCate1 = await md1.tlModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
         
             if (existingCate || existingCate1) {
                 // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
@@ -64,7 +65,8 @@ exports.tlAdd = async (req,res,next) =>{
                 // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
                 let objtl = new md1.tlModal();
                 objtl.name = req.body.name;
-                objtl.image = "http://localhost:3000/uploads/" + req.file.originalname;
+              
+                objtl.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
                
                 await objtl.save();
                 msg = " Thêm Thể Loại  thành CÔng";
@@ -141,7 +143,7 @@ exports.tlUp = async (req,res,next) =>{
               try {
                 // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
                 const existingCate = await md1.tlModal.findOne({ name: req.body.name});
-                const existingCate1 = await md1.tlModal.findOne({ image:"http://localhost:3000/uploads/" + req.file.originalname });
+                const existingCate1 = await md1.tlModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
             
                 if (existingCate || existingCate1) {
                     // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
@@ -151,7 +153,7 @@ exports.tlUp = async (req,res,next) =>{
                     if(validate){
                         let objtl_2  = {};
                         objtl_2.name = name;
-                        objtl_2.image = "http://localhost:3000/uploads/" + req.file.originalname ;
+                        objtl_2.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
         
                         // tìm theo chuỗi id và update 
                         await md1.tlModal.findByIdAndUpdate(id_tl,objtl_2);
