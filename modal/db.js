@@ -13,9 +13,13 @@ const mongoose = require("mongoose");
 //     }
 // }
 
-mongoose.connect("mongodb+srv://k53ka10e:k457GUmMnZgsoVzo@datn.6hbuotf.mongodb.net/DATN?retryWrites=true&w=majority&appName=DATN", { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(error => console.error('Error connecting to MongoDB:', error));
-
+require("dotenv").config();
+mongoose
+  .connect(process.env.MONGOODB_CONNECT_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
+  .then(() => console.log("connected to DB."))
+  .catch((err) => console.log(err));
 
     module.exports = {mongoose};
