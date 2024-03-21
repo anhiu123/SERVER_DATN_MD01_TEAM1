@@ -1,5 +1,9 @@
 var md1 = require('../modal/theloai.modal');
-var fs = require('fs'); 
+// var fs = require('fs'); 
+
+const admin = require('firebase-admin');
+const fs = require('fs-extra');
+const path = require('path');
 
 exports.tlList = async (req,res,next) =>{
     // render ra view 
@@ -25,6 +29,44 @@ exports.tlList = async (req,res,next) =>{
 exports.tlAdd = async (req,res,next) =>{
     // render ra view 
 
+    var admin = require("firebase-admin");
+
+var serviceAccount = require("./serviceAcount.json");
+
+if (!admin.apps.length) { // Kiểm tra xem Firebase đã được khởi tạo chưa
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        storageBucket: "vidu2-96b2f.appspot.com"
+    });
+}
+
+const bucket = admin.storage().bucket();
+function uploadToFirebaseStorage(filePath, originalName) {
+    return new Promise((resolve, reject) => {
+        bucket.upload(
+            filePath,
+            {
+                destination: 'uploads/' + originalName, // Đường dẫn trên Firebase Cloud Storage
+                metadata: {
+                    contentType: 'image/jpeg' // Định dạng của file (ở đây là ví dụ cho file ảnh JPEG)
+                }
+            },
+            (err, file) => {
+                if (err) {
+                    console.error('Error uploading file to Firebase Storage:', err);
+                    reject(err);
+                } else {
+                    // Lấy đường dẫn URL của ảnh trên Firebase Storage
+                    const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media`;
+
+                    // Trả về đường dẫn URL của ảnh
+                    resolve(imageUrl);
+                }
+            }
+        );
+    });
+}
+
     console.log(req.body);
     let msg = ''; 
     let objU = req.session.userLogin;
@@ -37,26 +79,45 @@ exports.tlAdd = async (req,res,next) =>{
             return  res.render('theloai/addloai',{msg:msg , objU:objU});
         }
 
+        const tempFilePath = req.file.path;
+        // Tên gốc của file
+        const originalFileName = req.file.originalname;
+
         
         try {
-            fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
-    
-                if(err){
-                    
-                    console.log(err);
-                }else{
-                    console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
-                }
-    
-            })
+            fs.rename(tempFilePath, './public/uploads/' + originalFileName, (err) => {
+              if (err) {
+                console.error('Error renaming file:', err);
+                return res.status(500).json({ error: 'Error renaming file' });
+              } else {
+                console.log('File renamed successfully');
+                // Sau khi rename file, gọi hàm uploadToFirebaseStorage để upload lên Firebase
+                uploadToFirebaseStorage('./public/uploads/' + originalFileName, originalFileName)
+                  .then(() => {
+                    console.log('File uploaded to Firebase successfully');
+                    // Nếu muốn redirect hoặc render trang khác sau khi upload thành công
+                    // res.redirect('url');
+                    // hoặc
+                    // res.render('view');
+                  })
+                  .catch((uploadError) => {
+                    console.error('Error uploading file to Firebase:', uploadError);
+                    res.status(500).json({ error: 'Error uploading file to Firebase' });
+                  });
+              }
+            });
           } catch (error) {
-            
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Error uploading file' });
           }
+        
         // làm tương tự với các validate khác 
         try {
+            const imageUrl = await uploadToFirebaseStorage('./public/uploads/' + originalFileName, originalFileName);
+        
             // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
             const existingCate = await md1.tlModal.findOne({ name: req.body.name});
-            const existingCate1 = await md1.tlModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
+            const existingCate1 = await md1.tlModal.findOne({ image: imageUrl });
         
             if (existingCate || existingCate1) {
                 // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
@@ -65,8 +126,10 @@ exports.tlAdd = async (req,res,next) =>{
                 // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
                 let objtl = new md1.tlModal();
                 objtl.name = req.body.name;
-              
-                objtl.image =  "https://server-datn-md01-team1.onrender.com/uploads/"  + req.file.originalname;
+            
+                // Lưu đường dẫn URL của ảnh vào trường image của objtl
+                objtl.image = imageUrl;
+        
                 await objtl.save();
                 msg = " Thêm Thể Loại  thành CÔng";
             }
