@@ -66,8 +66,7 @@ exports.tlAdd = async (req,res,next) =>{
                 let objtl = new md1.tlModal();
                 objtl.name = req.body.name;
               
-                objtl.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
-               
+                objtl.image =  "https://server-datn-md01-team1.onrender.com/uploads/"  + req.file.originalname;
                 await objtl.save();
                 msg = " Thêm Thể Loại  thành CÔng";
             }
@@ -93,7 +92,7 @@ exports.tlDel = async (req,res,next) =>{
         try {
             
             await md1.tlModal.findByIdAndDelete(id_tl);
-            res.send("Đã Xóa THành CÔng ${objSp.name} . <a href='/theloai/listloai'>DS</a>");
+            res.send("Đã Xóa THành CÔng ${objSp.name} . <a href='/theloai'>DS</a>");
 
         } catch (error) {
             res.send(err.message);
