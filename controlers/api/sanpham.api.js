@@ -157,3 +157,28 @@ exports.xemct1SP = async(req,res,next)=>{
             res.json(objRes.data);
 
 }
+
+exports.laySPName = async (req, res, next) => {
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: {}
+    };
+
+    let name1 = req.params.id;
+
+    try {
+        objRes.data = await md.spModal.findOne({ name: name1 });
+
+        if (objRes.data) {
+            objRes.msg = "Lấy dữ liệu thành công";
+        } else {
+            objRes.msg = "Không tìm thấy dữ liệu";
+        }
+    } catch (err) {
+        console.log(err);
+        objRes.msg = err.message;
+    }
+
+    res.json(objRes.data);
+}

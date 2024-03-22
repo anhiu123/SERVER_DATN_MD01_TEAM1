@@ -44,6 +44,8 @@ router.post('/SPL/:id_u/:id_pr', apiSPL.addSPL);
 
 router.get('/:id', apiSP.xemct1SP);
 
+router.get('/name/:id', apiSP.laySPName);
+
 
 
 module.exports = router;

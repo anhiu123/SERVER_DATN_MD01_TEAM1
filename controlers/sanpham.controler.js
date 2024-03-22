@@ -337,12 +337,13 @@ function uploadToFirebaseStorage(filePath, originalName) {
                             console.error(error);
                         }
                     }
-
+              
                     const data1 = {
                         content: "Sản Phẩm Mới",
                         date: fullDateTimeString,
                         status:  "Bạn Ơi, chúng tôi vừa cập nhật một sản phẩm mới : " + req.body.name +  ", chắc chắc sẽ không làm bạn thất vọng. Hãy vào xem thông tin chi tiết để không bỏ lỡ cơ hội.",
                         UserId: "1",
+                        name: req.body.name ,
                         image :imageUrl,
                     };
 
