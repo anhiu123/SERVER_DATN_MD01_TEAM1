@@ -1,6 +1,11 @@
 var md1 = require('../modal/voucher.modal');
-var fs = require('fs'); 
+
 const moment = require('moment');
+
+const admin = require('firebase-admin');
+const fs = require('fs-extra');
+const path = require('path');
+
 
 exports.vcList = async (req,res,next) =>{
     // render ra view 
@@ -25,42 +30,102 @@ exports.vcList = async (req,res,next) =>{
 
 exports.vcAdd = async (req,res,next) =>{
     // render ra view 
+    var admin = require("firebase-admin");
 
+    var serviceAccount = require("./serviceAcount.json");
+    
+    if (!admin.apps.length) { // Kiểm tra xem Firebase đã được khởi tạo chưa
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+            storageBucket: "vidu2-96b2f.appspot.com"
+        });
+    }
+    
+    const bucket = admin.storage().bucket();
+    function uploadToFirebaseStorage(filePath, originalName) {
+        return new Promise((resolve, reject) => {
+            bucket.upload(
+                filePath,
+                {
+                    destination: 'uploads/' + originalName, // Đường dẫn trên Firebase Cloud Storage
+                    metadata: {
+                        contentType: 'image/jpeg' // Định dạng của file (ở đây là ví dụ cho file ảnh JPEG)
+                    }
+                },
+                (err, file) => {
+                    if (err) {
+                        console.error('Error uploading file to Firebase Storage:', err);
+                        reject(err);
+                    } else {
+                        // Lấy đường dẫn URL của ảnh trên Firebase Storage
+                        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media`;
+    
+                        // Trả về đường dẫn URL của ảnh
+                        resolve(imageUrl);
+                    }
+                }
+            );
+        });
+    }
   
+
     let msg = ''; 
     let objU = req.session.userLogin;
     let listtl = null;
 
     if(req.method == 'POST'){
         // validate đơn giản : 
+        const tempFilePath = req.file.path;
+        // Tên gốc của file
+        const originalFileName = req.file.originalname;
+
+        
+        try {
+            fs.rename(tempFilePath, './public/uploads/' + originalFileName, (err) => {
+              if (err) {
+                console.error('Error renaming file:', err);
+                return res.status(500).json({ error: 'Error renaming file' });
+              } else {
+                console.log('File renamed successfully');
+                // Sau khi rename file, gọi hàm uploadToFirebaseStorage để upload lên Firebase
+                uploadToFirebaseStorage('./public/uploads/' + originalFileName, originalFileName)
+                  .then(() => {
+                    console.log('File uploaded to Firebase successfully');
+                    // Nếu muốn redirect hoặc render trang khác sau khi upload thành công
+                    // res.redirect('url');
+                    // hoặc
+                    // res.render('view');
+                  })
+                  .catch((uploadError) => {
+                    console.error('Error uploading file to Firebase:', uploadError);
+                    res.status(500).json({ error: 'Error uploading file to Firebase' });
+                  });
+              }
+            });
+          } catch (error) {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Error uploading file' });
+          }
+        
+
+
         const fullDateTimeString = moment().format('YYYY-MM-DD HH:mm:ss');
         if(req.body.name.length<1 || req.body.content.length<1 || req.body.start_date.length<1  || req.body.end_date.length<1){
             msg = "Không Được Để Trống";
             return  res.render('voucher/add',{msg:msg , objU:objU});
         }
        
-        
-        try {
-            fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
     
-                if(err){
-                    console.log(err);
-                }else{
-                    console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
-                }
-    
-            })
-          } catch (error) {
-            
-          }
          
         // làm tương tự với các validate khác 
         try {
+            const imageUrl = await uploadToFirebaseStorage('./public/uploads/' + originalFileName, originalFileName);
+        
             // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
             const existingCate = await md1.VoucherModal.findOne({ name: req.body.name});
             const existingCate2 = await md1.VoucherModal.findOne({ content: req.body.content});
 
-            const existingCate1 = await md1.VoucherModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
+            const existingCate1 = await md1.VoucherModal.findOne({ image:  imageUrl });
         
             if (existingCate || existingCate1 || existingCate2) {
                 // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
@@ -74,7 +139,7 @@ exports.vcAdd = async (req,res,next) =>{
                 objvc.price = req.body.price;
                 objvc.toDate = req.body.name;
                 objvc.create_time = fullDateTimeString;
-                objvc.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
+                objvc.image =  imageUrl;
                
                 await objvc.save();
                 msg = " Thêm Voucher  thành CÔng";
@@ -122,6 +187,44 @@ exports.vcUp = async (req,res,next) =>{
     let dieukien = {_id:id_tl};
     let objU = req.session.userLogin;
 
+    var admin = require("firebase-admin");
+
+    var serviceAccount = require("./serviceAcount.json");
+    
+    if (!admin.apps.length) { // Kiểm tra xem Firebase đã được khởi tạo chưa
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+            storageBucket: "vidu2-96b2f.appspot.com"
+        });
+    }
+    
+    const bucket = admin.storage().bucket();
+    function uploadToFirebaseStorage(filePath, originalName) {
+        return new Promise((resolve, reject) => {
+            bucket.upload(
+                filePath,
+                {
+                    destination: 'uploads/' + originalName, // Đường dẫn trên Firebase Cloud Storage
+                    metadata: {
+                        contentType: 'image/jpeg' // Định dạng của file (ở đây là ví dụ cho file ảnh JPEG)
+                    }
+                },
+                (err, file) => {
+                    if (err) {
+                        console.error('Error uploading file to Firebase Storage:', err);
+                        reject(err);
+                    } else {
+                        // Lấy đường dẫn URL của ảnh trên Firebase Storage
+                        const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(file.name)}?alt=media`;
+    
+                        // Trả về đường dẫn URL của ảnh
+                        resolve(imageUrl);
+                    }
+                }
+            );
+        });
+    }
+    objtl = await md1.VoucherModal.findById(dieukien);
     try {
         // xử lí sư kiện post 
         if(req.method=='POST'){
@@ -138,27 +241,93 @@ exports.vcUp = async (req,res,next) =>{
                 validate  = false;       
             }
 
+            const tempFilePath = req.file.path;
+            // Tên gốc của file
+            const originalFileName = req.file.originalname;
+    
+            
             try {
-                fs.rename(req.file.path, "./public/uploads/" + req.file.originalname,(err)=>{
-        
-                    if(err){
-                        console.log(err);
-                    }else{
-                        console.log("url : http://localhost:3000/uploads/" + req.file.originalname);
-                    }
-        
-                })
+                fs.rename(tempFilePath, './public/uploads/' + originalFileName, (err) => {
+                  if (err) {
+                    console.error('Error renaming file:', err);
+                    return res.status(500).json({ error: 'Error renaming file' });
+                  } else {
+                    console.log('File renamed successfully');
+                    // Sau khi rename file, gọi hàm uploadToFirebaseStorage để upload lên Firebase
+                    uploadToFirebaseStorage('./public/uploads/' + originalFileName, originalFileName)
+                      .then(() => {
+                        console.log('File uploaded to Firebase successfully');
+                        // Nếu muốn redirect hoặc render trang khác sau khi upload thành công
+                        // res.redirect('url');
+                        // hoặc
+                        // res.render('view');
+                      })
+                      .catch((uploadError) => {
+                        console.error('Error uploading file to Firebase:', uploadError);
+                        res.status(500).json({ error: 'Error uploading file to Firebase' });
+                      });
+                  }
+                });
               } catch (error) {
-                
+                console.error('Error:', error);
+                res.status(500).json({ error: 'Error uploading file' });
               }
+              const imageUrl = await uploadToFirebaseStorage('./public/uploads/' + originalFileName, originalFileName);
+
+              if(req.body.name == objtl.name && imageUrl == objtl.image && objtl.content == req.body.content) {
+
+                await md1.VoucherModal.findByIdAndUpdate(id_tl,objtl);
+                msg = ' cập nhật thành công !';
+               
+            }else if(req.body.name == objtl.name || imageUrl == objtl.image && objtl.content == req.body.content){
+                if(imageUrl != objtl.image || req.body.name != objtl.name || objtl.content != req.body.content) {
+                    objtl.image = imageUrl;
+                    objtl.name = req.body.name ;
+                    objtl.content = req.body.content ;
+                    await md1.VoucherModal.findByIdAndUpdate(id_tl,objtl);
+                    msg = " Cập Nhật THành CÔng !";
+                }
+
+            }else{
+                try {
+                    // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+                    const existingCate = await md1.VoucherModal.findOne({ name: req.body.name});
+                    const existingCate1 = await md1.VoucherModal.findOne({ image:  imageUrl });
+                    const existingCate2 = await md1.VoucherModal.findOne({ content: req.body.content});
+                
+                    if (existingCate || existingCate1 || existingCate2) {
+                        // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                        msg = "Đã Có VOucher  Này";
+                    } else {
+                        // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                        if(validate){
+                            let objtl_2  = {};
+                            objtl_2.name = name;
+                            objtl_2.content = content;
+                            objtl_2.price = price;
+                            objtl_2.fromDate = fromDate;
+                            objtl_2.toDate = toDate;
+                            objtl_2.image =  imageUrl;
+            
+                            // tìm theo chuỗi id và update 
+                            await md1.VoucherModal.findByIdAndUpdate(id_tl,objtl_2);
+                            msg = ' cập nhật thành công !';
+            
+                           
+                        }
+                    }
+                } catch (err) {
+                    msg = "Lỗi : " + err.message;
+                }
+            }
 
               try {
                 // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
                 const existingCate = await md1.VoucherModal.findOne({ name: req.body.name});
-                const existingCate1 = await md1.VoucherModal.findOne({ image:  "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname });
+                const existingCate1 = await md1.VoucherModal.findOne({ image:  imageUrl });
                 const existingCate2 = await md1.VoucherModal.findOne({ content: req.body.content});
             
-                if (existingCate || existingCate1 |existingCate2) {
+                if (existingCate || existingCate1 || existingCate2) {
                     // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
                     msg = "Đã Có VOucher  Này";
                 } else {
@@ -170,7 +339,7 @@ exports.vcUp = async (req,res,next) =>{
                         objtl_2.price = price;
                         objtl_2.fromDate = fromDate;
                         objtl_2.toDate = toDate;
-                        objtl_2.image =   "https://server-datn-md01-team1.onrender.com/uploads/" + req.file.originalname;
+                        objtl_2.image =  imageUrl;
         
                         // tìm theo chuỗi id và update 
                         await md1.VoucherModal.findByIdAndUpdate(id_tl,objtl_2);

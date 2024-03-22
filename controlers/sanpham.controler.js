@@ -610,7 +610,7 @@ exports.spUpdate = async (req,res,next) =>{
             );
         });
     }
-
+    objSp = await md.spModal.findById(dieukien);
 
     try {
         // xử lí sư kiện post 
@@ -646,48 +646,74 @@ exports.spUpdate = async (req,res,next) =>{
                 console.error('Error:', error);
                 res.status(500).json({ error: 'Error uploading file' });
               }
+
+
             let name = req.body.name;
             const imageUrl = await uploadToFirebaseStorage('./public/uploads/' + originalFileName, originalFileName);
-            // Lưu đường dẫn URL của ảnh vào trường image của objtl
-            let image = imageUrl;
-            let describe = req.body.describe;
-            let loai = req.body.loai;
-            let price = req.body.price;
-            let validate = true;
+            if(req.body.name == objSp.name && imageUrl == objSp.image) {
 
-            if(req.body.name.length ==0 || req.body.describe.length ==0 || req.body.loai.length ==0 || req.body.price.length ==0){
-                msg = "Không Được Để Trống ";    
-                validate  = false;       
-            }
-            try {
-                // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
-                const existingSP = await md.spModal.findOne({ name: req.body.name});
-                const existingSP1 = await md.spModal.findOne({ image: imageUrl});
-              
-                if (existingSP || existingSP1) {
-                    // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
-                    msg = "Đã Có Sản Phẩm Này";
-                } else {
-                    // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
-                    if(validate){
-                        let objSp_2  = {};
-                        objSp_2.name = name;
-                        objSp_2.image = image;
-                        objSp_2.describe = describe;
-                        objSp_2.category = loai;
-                        objSp_2.price = price;
-                      
-                        // tìm theo chuỗi id và update 
-                        await md.spModal.findByIdAndUpdate(id_sp,objSp_2);
-                        msg = ' cập nhật thành công !';
-                    } 
+                await md.spModal.findByIdAndUpdate(id_sp,objSp);
+                msg = ' cập nhật thành công !';
+                res.render('sanpham/update',{msg:msg,obj:objtl});
+            }else if(req.body.name == objSp.name)
+            { 
+                if(imageUrl != objSp.image){
+                    objSp.image = imageUrl;
+                    await md.spModal.findByIdAndUpdate(id_sp,objSp);
+                    msg = ' cập nhật thành công !';
+                   
+                   }
+            }else if(imageUrl == objSp.image){
+                if(req.body.name != objSp.name){
+                    objSp.name = req.body.name;
+                    await md.spModal.findByIdAndUpdate(id_sp,objSp);
+                    msg = ' cập nhật thành công !';
+                   
+                   }
+            }else{
+
+                let image = imageUrl;
+                let describe = req.body.describe;
+                let loai = req.body.loai;
+                let price = req.body.price;
+                let validate = true;
+    
+                if(req.body.name.length ==0 || req.body.describe.length ==0 || req.body.loai.length ==0 || req.body.price.length ==0){
+                    msg = "Không Được Để Trống ";    
+                    validate  = false;       
                 }
-            } catch (err) {
-                msg = "Lỗi : " + err.message;
+                try {
+                    // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+                    const existingSP = await md.spModal.findOne({ name: req.body.name});
+                    const existingSP1 = await md.spModal.findOne({ image: imageUrl});
+                  
+                    if (existingSP || existingSP1) {
+                        // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                        msg = "Đã Có Sản Phẩm Này";
+                    } else {
+                        // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                        if(validate){
+                            let objSp_2  = {};
+                            objSp_2.name = name;
+                            objSp_2.image = image;
+                            objSp_2.describe = describe;
+                            objSp_2.category = loai;
+                            objSp_2.price = price;
+                          
+                            // tìm theo chuỗi id và update 
+                            await md.spModal.findByIdAndUpdate(id_sp,objSp_2);
+                            msg = ' cập nhật thành công !';
+                        } 
+                    }
+                } catch (err) {
+                    msg = "Lỗi : " + err.message;
+                }
             }
-            // tạo đối tượng lưu csdl 
-        };  
-        objSp = await md.spModal.findById(dieukien);
+
+                // tạo đối tượng lưu csdl 
+            };  
+
+            
     } catch (error) {
         msg = error.message;
     }
@@ -743,7 +769,7 @@ exports.spUpTT  =async  (req,res,next) =>{
             );
         });
     }
-
+    objMsp = await mdMauSanPham.mauSPModal.findById(dieukien);
 
     try {
         const sizes = [
@@ -791,33 +817,78 @@ exports.spUpTT  =async  (req,res,next) =>{
             let image =   imageUrl
             let validate = true;
 
-            try {
-                // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
-                const existingColor = await mdMauSanPham.mauSPModal.findOne({ productId: id_sp, colorId: req.body.mau });
-                const existingSP1 = await mdMauSanPham.mauSPModal.findOne({ image: imageUrl});
-              
-                if (  existingSP1 || existingColor) {
-                    // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
-                    msg = "Đã Có Thuộc Tính Này";
-                } else {
-                    // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
-                    if(validate){
-                        let objTT  = {};
-                        objTT.colorId  = req.body.mau;
-                        objTT.image =   imageUrl;
-                        objTT.sizes = sizes;
-            
-                        // tìm theo chuỗi id và update 
-                        await mdMauSanPham.mauSPModal.findByIdAndUpdate(id_msp,objTT);
-                        msg = ' cập nhật thành công !';
-                    } 
-                }
-            } catch (err) {
-                msg = "Lỗi : " + err.message;
+            if( objMsp.productId == id_sp &&  objMsp.colorId == req.body.mau && imageUrl == objMsp.image) {
+
+                await mdMauSanPham.mauSPModal.findByIdAndUpdate(id_msp,objMsp);
+                msg = ' cập nhật thành công !';
+                res.render('sanpham/suamau',{msg:msg,objMsp:objMsp ,listmau:listmau,objU:objU});
+            }else if(objMsp.productId == id_sp &&  objMsp.colorId == req.body.mau){ 
+                if(imageUrl != objMsp.image){
+                    objMsp.image = imageUrl;
+                    await mdMauSanPham.mauSPModal.findByIdAndUpdate(id_msp,objMsp);
+                    msg = ' cập nhật thành công !';
+                   }
             }
-            // tạo đối tượng lưu csdl 
+            else{
+                try {
+                    // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+                    const existingColor = await mdMauSanPham.mauSPModal.findOne({ productId: id_sp, colorId: req.body.mau });
+                    const existingSP1 = await mdMauSanPham.mauSPModal.findOne({ image: imageUrl});
+                  
+                    if ( existingSP1 || existingColor) {
+                        // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                        msg = "Đã Có Thuộc Tính Này";
+                        validate = false;
+                      
+                    } else {
+                        // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                        if(validate){
+                            let objTT  = {};
+                            
+                            objTT.colorId  = req.body.mau;
+                            objTT.image =   imageUrl;
+                            objTT.sizes = sizes;
+                
+                            // tìm theo chuỗi id và update 
+                            await mdMauSanPham.mauSPModal.findByIdAndUpdate(id_msp,objTT);
+                            msg = ' cập nhật thành công !';
+                        } 
+                    }
+                } catch (err) {
+                    msg = "Lỗi : " + err.message;
+                }
+            }
+                try {
+                    // Kiểm tra xem màu sản phẩm đã tồn tại trong sản phẩm chưa
+                    const existingColor = await mdMauSanPham.mauSPModal.findOne({ productId: id_sp, colorId: req.body.mau });
+                    const existingSP1 = await mdMauSanPham.mauSPModal.findOne({ image: imageUrl});
+                  
+                    if (  existingSP1 || existingColor) {
+                        // Nếu màu sản phẩm đã tồn tại, hiển thị thông báo và không thêm mới
+                        msg = "Đã Có Thuộc Tính Này";
+                    } else {
+                        // Nếu màu sản phẩm chưa tồn tại, thêm mới vào cơ sở dữ liệu
+                        if(validate){
+                            let objTT  = {};
+                            
+                            objTT.colorId  = req.body.mau;
+                            objTT.image =   imageUrl;
+                            objTT.sizes = sizes;
+                
+                            // tìm theo chuỗi id và update 
+                            await mdMauSanPham.mauSPModal.findByIdAndUpdate(id_msp,objTT);
+                            msg = ' cập nhật thành công !';
+                        } 
+                    }
+                } catch (err) {
+                    msg = "Lỗi : " + err.message;
+                }
+                // tạo đối tượng lưu csdl 
+            
+
+            
         };  
-        objMsp = await mdMauSanPham.mauSPModal.findById(dieukien);
+       
     } catch (error) {
         msg = error.message;
     }

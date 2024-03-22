@@ -56,8 +56,8 @@
                         <label  for="exampleInputPassword1" class="form-label">Tên Màu</label>
                         <select id="item" name="mau">
                             <% listmau.forEach((item) => { %>
-                              <option value="<%= item._id %>"><%= item.name %></option>
-                            <% }); %>
+                              <option value="<%= item.colorcode %>"><%= item.name %></option>
+                              <% }); %>
                           </select>    
                           <br>
                           <label for="exampleInputPassword1" class="form-label">Ảnh Đại Diện</label>
