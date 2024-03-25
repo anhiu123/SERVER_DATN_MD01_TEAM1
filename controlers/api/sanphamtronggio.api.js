@@ -110,7 +110,7 @@ exports.dltSPG = async (req,res,next)=>{
         data: {}
         };
         
-    let id_sp = req.params.id;
+    let cartId = req.params.id;
 
     try {
      await md.SPGModal.findByIdAndDelete(id_sp);
@@ -119,6 +119,21 @@ exports.dltSPG = async (req,res,next)=>{
     } catch (error) {
         objRes.msg = error.message;
     }
+
+    try {
+        // Xóa tất cả các sản phẩm có CartId tương ứng
+        const result = await md.SPGModal.deleteMany({ CartId: cartId });
+
+        if (result.deletedCount > 0) {
+            objRes.msg = "Đã xóa thành công " + result.deletedCount + " sản phẩm";
+            objRes.status = 1;
+        } else {
+            objRes.msg = "Không tìm thấy sản phẩm nào để xóa";
+        }
+    } catch (error) {
+        objRes.msg = error.message;
+    }
+
 
     res.json (objRes);
 }
