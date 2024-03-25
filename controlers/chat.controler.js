@@ -42,7 +42,7 @@ exports.chatdetail = async (req, res, next) => {
           msg = "";
           us = await md1.tkModal.find({ _id: id_us });
           let objU = req.session.userLogin;
-          res.render('chat/detailchat', { objU: objU, us: us, msg: msg, listTN: listTN });
+          res.render('chat/detailchat', { objU: objU, us: us, msg: msg, listTN: listTN , id_us : id_us });
       } catch (error) {
           console.log(error);
           // Xử lý lỗi tại đây nếu cần

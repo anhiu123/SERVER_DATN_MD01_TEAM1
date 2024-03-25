@@ -149,59 +149,54 @@
                     const messagesRef = db.ref('tinnhan');
             
                     // Function to fetch messages from Firebase and display them
+                    // Function to fetch messages from Firebase and display them
                     function fetchAndDisplayMessages() {
                         messagesRef.on('value', (snapshot) => {
                             const chatMessages = document.getElementById('chatMessages');
                             chatMessages.innerHTML = ''; // Clear existing messages
                             snapshot.forEach((childSnapshot) => {
                                 const message = childSnapshot.val();
-                                const messageDiv = document.createElement('div');
-                                messageDiv.classList.add('message', message.sender === 'admin' ? 'me' : 'other');
-                                // Customize messageDiv inner HTML based on your message structure
-                                if (message.sender === 'admin' ) {
-                                    messageDiv.innerHTML = `
-                                    <div  class="message-content">  
-                                        <div class="media">         
-                                                                                                             
+                                // Lọc dữ liệu theo UserId
+                                if (message.UserId === '<%= id_us %>') {
+                                    const messageDiv = document.createElement('div');
+                                    messageDiv.classList.add('message', message.sender === 'admin' ? 'me' : 'other');
+                                    // Customize messageDiv inner HTML based on your message structure
+                                    if (message.sender === 'admin' ) {
+                                        messageDiv.innerHTML = `
+                                            <div  class="message-content">  
+                                                <div class="media">         
                                                     <div  class="media-body">                                                                                                      
                                                         <div style="margin-left:400px; margin-top:50px " class="message-time">${message.date}</div>
                                                         <p > ${message.content}</p> 
-                                                        
-                                                  
-                                    </div>
-                                </div>
-                                </div>     
-                                    `;
-                                } else {
-                                    messageDiv.innerHTML = `
-                                        <div class="message-content">
-                                            <div class="media">
-                                                
-                                                <div class="d-flex align-items-center" style="margin-top:50px">
-                                                <% us.forEach((item)=>{ %>                                             
-                                                        <img src="<%= item.image %>" class="mr-3 rounded-circle" alt="Avatar" style="width: 40px;">
-                                                                                         
-                                                <% })  %>                                  
-                                               
-                                                    <% us.forEach((item)=>{ %>  
-                                                         <h5 style="margin-left:10px" class="mt-0"><%= item.username %></h5>                 
-                                                <% })  %>  
-                                                
-                                            </div>                                 
-                                                                                                                                                                                                                                                     
+                                                    </div>
+                                                </div>
+                                            </div>     
+                                        `;
+                                    } else {
+                                        messageDiv.innerHTML = `
+                                            <div class="message-content">
+                                                <div class="media">
+                                                    <div class="d-flex align-items-center" style="margin-top:50px">
+                                                        <% us.forEach((item)=>{ %>                                             
+                                                            <img src="<%= item.image %>" class="mr-3 rounded-circle" alt="Avatar" style="width: 40px;">
+                                                        <% })  %>                                  
+                                                        <% us.forEach((item)=>{ %>  
+                                                            <h5 style="margin-left:10px" class="mt-0"><%= item.username %></h5>                 
+                                                        <% })  %>  
+                                                    </div>                                 
                                                     <div class="message-time">${message.date}</div>
                                                     <p>${message.content}</p>  
-                                           
-                                              <br>
+                                                    <br>
+                                                </div>
                                             </div>
-                                        </div>
-                                    `;
-                                }     
-                                chatMessages.appendChild(messageDiv);
+                                        `;
+                                    }     
+                                    chatMessages.appendChild(messageDiv);
+                                }
                             });
                         });
                     }
-            
+                    
                     // Call the function to fetch and display messages
                     fetchAndDisplayMessages();
                 </script>
