@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var md = require('../../modal/sanphamingio.modal');
 
 var apiSP = require('../../controlers/api/sanpham.api');
 
@@ -39,6 +40,47 @@ router.post('/SPL/:id_u/:id_pr', apiSPL.addSPL);
 // router.post('/', apiSP.addSP);
 
 // router.delete('/:id', apiSP.dltSP);
+
+router.delete('/DLTCART/:id', async (req, res) => {
+    const id_sp = req.params.id;
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: {}
+    };
+
+    try {
+        await md.SPGModal.findByIdAndDelete(id_sp);
+        objRes.msg = "Đã xóa sản phẩm thành công";
+        objRes.status = 1;
+    } catch (error) {
+        objRes.msg = "Lỗi khi xóa sản phẩm: " + error.message;
+    }
+
+    res.status(200).json(objRes);
+});
+
+router.delete('/DLTCART', async (req, res) => {
+    const productIds = req.body.productIds;
+    let objRes = {
+        msg: '',
+        status: 0,
+        data: {}
+    };
+
+    try {
+        for (const productId of productIds) {
+            await md.SPGModal.findByIdAndDelete(productId);
+        }
+        objRes.msg = "Đã xóa sản phẩm thành công";
+        objRes.status = 1;
+    } catch (error) {
+        objRes.msg = "Lỗi khi xóa sản phẩm: " + error.message;
+    }
+
+    res.status(200).json(objRes);
+});
+
 
 // router.put('/:id', apiSP.putSP);
 
