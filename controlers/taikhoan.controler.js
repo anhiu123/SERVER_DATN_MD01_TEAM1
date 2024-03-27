@@ -1,6 +1,11 @@
 
 var md = require('../modal/taikhoan.modal');
 var md1 = require('../modal/admin.modal');
+
+const bcrypt = require('bcrypt');
+ // Số lượng vòng lặp để tạo ra salt, càng cao càng an toàn nhưng cũng tốn nhiều thời gian hơn
+
+
 exports.tkList = async(req,res,next) =>{
     // render ra view 
 
@@ -42,6 +47,16 @@ exports.tkAdd = async(req,res,next) =>{
     // render ra view 
 
     let msg = ''; 
+    const saltRounds = 10;
+    const hashPassword = async (plainPassword) => {
+        try {
+            const salt = await bcrypt.genSalt(saltRounds);
+            const hash = await bcrypt.hash(plainPassword, salt);
+            return hash;
+        } catch (error) {
+            throw new Error('Could not hash the password');
+        }
+    };
 
     if(req.method == 'POST'){
 
@@ -79,7 +94,7 @@ exports.tkAdd = async(req,res,next) =>{
                 let objtk = new md1.adminModal();
                 objtk.username = req.body.username;
                 objtk.email = req.body.email;
-                objtk.passwd = req.body.pass;
+                objtk.passwd = await hashPassword(req.body.pass);
                 if (req.body.admin === 'true') {
                     objtk.role = 'Admin';
                 } else if (req.body.admin === 'false') {
@@ -174,33 +189,38 @@ exports.tkUp = async(req,res,next) =>{
 }
 
 
-exports.Login = async(req,res,next)=>{
-   
+exports.Login = async(req, res, next) => {
     let msg = '';
-    if(req.method == 'POST'){
+    const comparePasswords = async (plainPassword, hashedPassword) => {
         try {
-            let objU = await md1.adminModal.findOne({username: req.body.username});
-         //   console.log(objU);
-            if(objU != null ){
-                // tồn tại username ==> kiểm tra passwd
-                if(objU.passwd == req.body.passwd){
-                    // đúng thông tin tài khoản ==> lưu vào session
-                    req.session.userLogin = objU; 
-                    // chuyển trang về trang quản trị
+            const match = await bcrypt.compare(plainPassword, hashedPassword);
+            return match;
+        } catch (error) {
+            console.error('Error comparing passwords:', error);
+            throw new Error('Could not compare the passwords');
+        }
+    };
+
+    if (req.method == 'POST') {
+        try {
+            let objU = await md1.adminModal.findOne({ username: req.body.username });
+            if (objU != null) {
+                // Tồn tại username ==> kiểm tra password
+                const passwordMatch = await comparePasswords(req.body.passwd, objU.passwd);
+                if (passwordMatch) {
+                    // Đúng thông tin tài khoản ==> lưu vào session
+                    req.session.userLogin = objU;
+                    // Chuyển trang về trang quản trị
                     return res.redirect('/sanpham/home');
-                }else{
+                } else {
                     msg = 'Sai password';
                 }
-
-            }else{
+            } else {
                 msg = 'Không tồn tại tài khoản: ' + req.body.username;
             }
-
         } catch (error) {
             msg = error.message;
         }
-    } 
-
-    res.render('index', {msg:msg})
-
+    }
+    res.render('index', { msg: msg });
 }
